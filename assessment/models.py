@@ -1,6 +1,6 @@
 
 from django.db import models
-from ..users.models import MyUser
+from ..users.models import CustomUser
 from ..courses.models import MyCourses
 
 # Create your models here.

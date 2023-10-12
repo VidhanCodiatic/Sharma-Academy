@@ -1,3 +1,30 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, HttpResponse
 
-# Create your views here.
+from enrollment.forms import EnrollForm
+from enrollment.models import *
+from django.views import View
+
+
+class EnrollView(View):
+    form_class = EnrollForm
+    template_name = "myapp/enrollment.html"
+
+    def get(self, request, *args, **kwargs):
+        enroll_form = self.form_class()
+        return render(request, self.template_name, {"enroll_form" : enroll_form })
+
+    def post(self, request, *args, **kwargs):
+        enroll_form = self.form_class(request.POST)
+        enroll_stu = request.POST.get('enrollment_for')
+        enroll_obj = CustomUser.objects.get(id = enroll_stu)
+        if enroll_obj.user_type == 'student':
+            enroll_form = EnrollForm(request.POST)
+            if enroll_form.is_valid():
+                enroll_form.save()
+                return HttpResponse(" enrolled")
+            else:
+                return HttpResponse('Not enrolled')
+        else:
+            return HttpResponse('not a student')
+        
+        return render(request, self.template_name, {"enroll_form" : enroll_form })
