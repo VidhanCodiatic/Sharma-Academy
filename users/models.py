@@ -15,7 +15,7 @@ class CustomUser(AbstractUser):
 
    username = None
    
-   phone_number = models.IntegerField(unique = True)
+   phone_number = models.IntegerField(unique = True, null = True)
    email = models.EmailField(unique = True)
    user_type = models.CharField(max_length = 100, 
                                 choices = USER_TYPE, default = 'Admin')

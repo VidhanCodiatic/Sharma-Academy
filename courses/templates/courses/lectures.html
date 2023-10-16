@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lectures Page</title>
+</head>
+<body>
+        <h1>Lectures</h1>
+        {% for i in upload_video %}
+        <video controls>
+            <source src="{{i.lecture.url}}" type="video/mp4">
+        </video>
+        {% endfor %}
+</body>
+</html>

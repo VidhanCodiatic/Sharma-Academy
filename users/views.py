@@ -40,11 +40,9 @@ class LoginView(View):
         login_form = self.form_class(request.POST)
         email = request.POST['email']
         user_password = request.POST['password']
-        print(user_password)
         if CustomUser.objects.filter(email = email).exists():
             obj = CustomUser.objects.get(email = email)
             password = obj.password
-            print(password)
             if check_password(user_password, password):
                 return redirect('/users/index/')
             else:

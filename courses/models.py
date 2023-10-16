@@ -1,7 +1,7 @@
 
 
 from django.db import models
-from ..users.models import CustomUser
+from users.models import CustomUser
 
 # Create your models here.
 
@@ -19,9 +19,25 @@ MODE_TYPE = (
 
 class Course(models.Model):
 
-    course_name = models.CharField(max_length = 100)
-    course_duration = models.CharField(max_length = 100, 
+    name = models.CharField(max_length = 100, unique = True)
+    duration = models.CharField(max_length = 100, 
                                        choices = DURATION, default = '3 months')
-    course_fees = models.IntegerField()
+    fees = models.IntegerField()
     mode_type = models.CharField(max_length = 100, 
                                  choices = MODE_TYPE, default = 'offline')
+    
+    def __str__(self) -> str:
+        return self.name
+
+class Lecture(models.Model):
+
+    upload_by = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    title = models.CharField(max_length = 100, unique = True)    
+    duration = models.CharField(max_length = 100)
+    lecture = models.FileField(upload_to = 'lectures/')
+    
+    def __str__(self):
+        return self.title
+
+
