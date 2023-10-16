@@ -39,5 +39,35 @@ class Lecture(models.Model):
     
     def __str__(self):
         return self.title
+    
+class Pdf(models.Model):
 
+    upload_by = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    title = models.CharField(max_length = 100)    
+    page = models.IntegerField()
+    pdfFile = models.FileField(upload_to = 'files/')
+    
+    def __str__(self):
+        return self.title
 
+class EmbedLecture(models.Model):
+
+    upload_by = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    title = models.CharField(max_length = 100)
+    duration = models.CharField(max_length = 100)
+    lectureUrl = models.URLField()
+
+    def __str__(self):
+        return self.title
+    
+class Document(models.Model):
+
+    upload_by = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    title = models.CharField(max_length = 100)
+    documentUrl = models.URLField()
+
+    def __str__(self):
+        return self.title

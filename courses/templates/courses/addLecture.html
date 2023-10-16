@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
+    <title>Add Lecture</title>
 </head>
 <body>
-    <h1>Courses</h1>
-    <form action = "{% url "addcourse" %}" method = "post" enctype="multipart/form-data">
+    <h1>Add Lectures for Courses</h1>
+    <form action = "{% url "addlecture" %}" method = "post" enctype="multipart/form-data">
         {% csrf_token %}
         {{lecture_form.as_p}}
         <input type = "submit", value = "Add Lecture">

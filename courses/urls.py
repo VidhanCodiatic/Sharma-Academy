@@ -1,13 +1,11 @@
 
 from django.urls import path
-from courses.views import LectureView, ShowLectureView
-
-from django.conf.urls.static import static
-from django.conf import settings
+from courses.views import LectureView, ShowLectureView, EmbedLectureView, DocumentView, PdfView
 
 urlpatterns = [
-    path('addcourse/', LectureView.as_view(), name = 'addcourse'),
+    path('addlecture/', LectureView.as_view(), name = 'addlecture'),
+    path('addembed/', EmbedLectureView.as_view(), name = 'addembed'),
+    path('adddox/', DocumentView.as_view(), name = 'adddox'),
+    path('addpdf/', PdfView.as_view(), name = 'addpdf'),
     path('showlectures/', ShowLectureView.as_view(), name = 'showlectures'),
 ]
-if settings.DEBUG:
-    urlpatterns+=static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

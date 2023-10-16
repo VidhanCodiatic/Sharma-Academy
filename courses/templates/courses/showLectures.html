@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lectures Page</title>
+</head>
+<body>
+    {% if upload_video %}
+        <h1>Lectures</h1>
+        {% for i in upload_video %}
+        {{i.title}}<br>
+        {{i.course}}<br>
+        {{i.duration}}<br>
+        <video autoplay="autoplay" controls="controls" preload="preload">
+            <source src="{{i.lecture.url}}" type="video/mp4">
+        </video><br>
+        {% endfor %}
+
+        {% else %}
+        <p>No videos yet</p>
+    {% endif %}
+
+
+    <h1>Embed video</h1>
+    <br>
+    {% for e in embed_video %}
+    {{e.title}}<br>
+    {{e.course}}<br>
+    {{e.duration}}<br>
+    <iframe width="560" height="315" src="{{e.lectureUrl}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><br>
+    {% endfor %}
+
+    <h1>Document Links</h1>
+
+    {% for d in document %}
+    {{d.upload_by}}<br>
+    {{d.course}}<br>
+    {{d.title}}<br>
+    <a href="{{d.documentUrl}}">{{d.documentUrl}}</a>
+    {% endfor %}
+
+    <h1>Course Pdf</h1>
+
+    {% for f in files %}
+    {{f.upload_by}}<br>
+    {{f.course}}<br>
+    {{f.title}}<br>
+    <a href="{{f.pdfFile.url}}">Open PDF</a>
+    {% endfor %}
+</body>
+</html>
