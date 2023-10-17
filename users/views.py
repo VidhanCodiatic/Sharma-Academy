@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from users.forms import RegisterForm, LoginForm
 from django.contrib.auth.hashers import make_password, check_password
 from users.models import *
+from courses.models import Course
 from django.views import View
 
 
@@ -22,7 +23,7 @@ class RegisterView(View):
             user = form.save(commit=False)
             user.password = make_password(user.password)
             user.save()
-            return redirect("/users/login/")
+            return redirect("/")
         else:
             return HttpResponse('Form is not valid')
 
@@ -44,7 +45,7 @@ class LoginView(View):
             obj = CustomUser.objects.get(email = email)
             password = obj.password
             if check_password(user_password, password):
-                return redirect('/users/index/')
+                return redirect('/index/')
             else:
                 return HttpResponse('password is not correct') 
         else:
@@ -56,4 +57,7 @@ class LoginView(View):
 
 
 def index(request):
-    return render(request, 'users/index.html')
+    courses = Course.objects.all()
+    users = CustomUser.objects.all()
+    return render(request, 'users/index.html', {'courses' : courses,
+                                                'users' : users})

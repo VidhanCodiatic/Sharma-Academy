@@ -7,7 +7,7 @@ from django.views import View
 
 class EnrollView(View):
     form_class = EnrollForm
-    template_name = "myapp/enrollment.html"
+    template_name = "enrollment/enrollment.html"
 
     def get(self, request, *args, **kwargs):
         enroll_form = self.form_class()

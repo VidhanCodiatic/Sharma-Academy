@@ -5,7 +5,7 @@ from django.views import View
 from courses.forms import LectureForm, EmbedLectureForm, DocumentForm, PdfForm
 
 from users.models import CustomUser
-from courses.models import Lecture, EmbedLecture, Document, Pdf
+from courses.models import Lecture, EmbedLecture, Document, Pdf, Course
 
 
 # Create your views here.
@@ -126,3 +126,11 @@ class ShowLectureView(View):
                                                      'embed_video' : embed_video,
                                                      'document' : document,
                                                      'files': files})
+    
+
+class ShowCourseView(View):
+    template_name = "courses/showCourses.html"
+
+    def get(self, request, *args, **kwargs):
+        courses = Course.objects.all()
+        return render(request, self.template_name, {'courses' : courses})
