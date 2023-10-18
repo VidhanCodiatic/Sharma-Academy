@@ -3,9 +3,10 @@
 from django.shortcuts import render, redirect, HttpResponse
 
 from users.forms import RegisterForm, LoginForm
+from enrollment.forms import EnrollForm
 from django.contrib.auth.hashers import make_password, check_password
 from users.models import *
-from courses.models import Course
+from courses.models import Course, Lecture
 from django.views import View
 
 
@@ -57,7 +58,11 @@ class LoginView(View):
 
 
 def index(request):
+    enroll_form = EnrollForm
     courses = Course.objects.all()
     users = CustomUser.objects.all()
+    upload_video = Lecture.objects.all()
     return render(request, 'users/index.html', {'courses' : courses,
-                                                'users' : users})
+                                                'users' : users,
+                                                'upload_video' : upload_video,
+                                                'enroll_form' : enroll_form})

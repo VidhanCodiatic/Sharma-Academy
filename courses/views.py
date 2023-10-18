@@ -134,3 +134,7 @@ class ShowCourseView(View):
     def get(self, request, *args, **kwargs):
         courses = Course.objects.all()
         return render(request, self.template_name, {'courses' : courses})
+    
+def index(request):
+    courses = Course.objects.all()
+    return render(request, 'courses/index.html', {'courses' : courses})

@@ -1,5 +1,18 @@
-from courses.models import Lecture, EmbedLecture, Document, Pdf
+from courses.models import Course, Lecture, EmbedLecture, Document, Pdf
 from django import forms
+from users.models import CustomUser
+
+
+class CourseForm(forms.ModelForm):
+
+    class Meta:
+        model = Course
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(CourseForm, self).__init__(*args, **kwargs)
+        self.fields['instructor'].queryset = CustomUser.objects.filter(user_type = 'instructor')
+
 
 class LectureForm(forms.ModelForm):
 
