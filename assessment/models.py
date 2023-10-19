@@ -1,7 +1,6 @@
 
 from django.db import models
-from ..users.models import CustomUser
-from ..courses.models import MyCourses
+from courses.models import Course
 
 # Create your models here.
 
@@ -13,8 +12,33 @@ ASSESSMENT_TYPE = (
 
 class Assessment(models.Model):
 
-    assessment_for = models.ForeignKey(MyCourses, on_delete = models.CASCADE)
-    assessment_title = models.CharField(max_length = 100)
-    content_duration = models.CharField(max_length = 100)
-    assessment_type = models.CharField(max_length = 100, 
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    title = models.CharField(max_length = 100)
+    duration = models.CharField(max_length = 100)
+    type = models.CharField(max_length = 100, 
                                  choices = ASSESSMENT_TYPE, default = 'mcq')
+    
+    def __str__(self):
+        return self.title
+    
+class Question(models.Model):
+
+    assessment = models.ForeignKey(Assessment, on_delete = models.CASCADE)
+    question = models.CharField(max_length = 255)
+
+    def __str__(self):
+        return self.question
+    
+class Choice(models.Model):
+
+    question = models.ForeignKey(Question, on_delete = models.CASCADE)
+    option = models.CharField(max_length = 200)
+    correct = models.BooleanField(default = False)
+
+    def __str__(self):
+        return self.option
+
+class Answer(models.Model):
+
+    question = models.ForeignKey(Question, on_delete = models.CASCADE)
+    content = models.TextField(blank=True)

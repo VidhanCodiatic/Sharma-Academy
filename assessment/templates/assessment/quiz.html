@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+</head>
+<body>
+    <form action="{% url "quiz" %}" method="post">
+        {% csrf_token %}
+        {% for q in questions %}
+        {% if q.choice_set.all %}
+            <p>{{ q.question }}</p>
+            {% for c in q.choice_set.all %} {% comment %} choice_set is used for backward relation  {% endcomment %}
+                <input type="radio" name = "q_{{ q.id }}" value="{{ c.id }}">{{ c.option }}<br>
+            {% endfor %}
+        {% endif %}
+        {% endfor %}
+
+        <h1>second loop</h1>
+
+        {% for q in questions %}
+        {% if q.choice_set.all %}
+            
+        {% else %}
+        <h1>Short Answer</h1>
+        <p>{{ q.question }}</p>
+        {{ form.as_p }}
+        {% endif %}
+        {% endfor %}
+
+        <input type="submit" value="Submit">
+    </form>
+
+
+
+
+   <h2>Add Photos</h2>
+   <form method="post" enctype="multipart/form-data">
+       {{ formset.as_p }}
+       {% csrf_token %}
+       <button type="submit" >Save</button>
+   </form>
+</body>
+</html>
