@@ -28,6 +28,15 @@
 
                     <div class="signin-form">
                         <h2 class="form-title">Sign In</h2>
+                        {% if messages %}
+
+                        {% for message in messages %}
+                        <div class="alert alert-info">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                  
+                        {% endif %}
                         <form action = "{% url "login" %}" method = "post" class="register-form" id="login-form">
                             {% csrf_token %}
                             <div class="form-group">
@@ -53,6 +62,9 @@
                                 <li><a href="#"><i class="display-flex-center zmdi zmdi-twitter"></i></a></li>
                                 <li><a href="#"><i class="display-flex-center zmdi zmdi-google"></i></a></li>
                             </ul>
+                        </div>
+                        <div>
+                            <a href="{% url "password-reset" %}">forgot password</a>
                         </div>
                     </div>
                 </div>

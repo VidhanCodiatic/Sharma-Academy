@@ -13,7 +13,8 @@ class EnrollView(View):
 
     def post(self, request, *args, **kwargs):
         enroll_form = self.form_class(request.POST)
-        enroll_stu = request.POST.get('enrollment_for')
+        enroll_stu = request.user
+        print('------------------',enroll_stu)
         enroll_obj = CustomUser.objects.get(id = enroll_stu)
         if enroll_obj.user_type == 'student':
             enroll_form = EnrollForm(request.POST)

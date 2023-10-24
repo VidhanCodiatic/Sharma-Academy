@@ -11,7 +11,7 @@ class CourseForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CourseForm, self).__init__(*args, **kwargs)
-        self.fields['instructor'].queryset = CustomUser.objects.filter(user_type = 'instructor')
+        self.fields['instructor'].queryset = CustomUser.objects.filter(type = 'instructor')
 
 
 class LectureForm(forms.ModelForm):

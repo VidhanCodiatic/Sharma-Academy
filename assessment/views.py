@@ -61,3 +61,24 @@ def create_multiple_content(request):
                         content.save()
                 return HttpResponse('created')
     return render(request, 'assessment/quiz.html', {'formset': formset})
+
+
+
+# class PublicationCreateView(EdqmCreateView):
+#     """ Create publication with document form through formset """
+#     model = Publication
+#     template_name = 'freepub/publication/publication_form.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super(PublicationCreateView, self).get_context_data(**kwargs)
+#         context['DocumentFormSets'] = DocumentFormSets(self.request.POST or None, self.request.FILES or None)
+#         return context
+
+#     def form_valid(self, form):
+#         context = self.get_context_data()
+#         formsets = context['DocumentFormSets']
+#         if form.is_valid() and formsets.is_valid():
+#             self.object = form.save()
+#             formsets.instance = self.object
+#             formsets.save()
+#         return super(PublicationCreateView, self).form_valid(form)

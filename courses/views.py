@@ -26,7 +26,7 @@ class LectureView(View):
         uploader = request.POST.get('upload_by')
         uploader_obj = CustomUser.objects.get(id = uploader)
 
-        if uploader_obj.user_type == 'instructor':
+        if uploader_obj.type == 'instructor':
             lecture_form = LectureForm(request.POST, request.FILES)
             if lecture_form.is_valid():
                 lecture_form.save()
@@ -52,7 +52,7 @@ class EmbedLectureView(View):
         uploader = request.POST.get('upload_by')
         uploader_obj = CustomUser.objects.get(id = uploader)
 
-        if uploader_obj.user_type == 'instructor':
+        if uploader_obj.type == 'instructor':
             embed_form = EmbedLectureForm(request.POST, request.FILES)
             if embed_form.is_valid():
                 embed_form.save()
@@ -77,7 +77,7 @@ class DocumentView(View):
         uploader = request.POST.get('upload_by')
         uploader_obj = CustomUser.objects.get(id = uploader)
 
-        if uploader_obj.user_type == 'instructor':
+        if uploader_obj.type == 'instructor':
             document_form = DocumentForm(request.POST, request.FILES)
             if document_form.is_valid():
                 document_form.save()
@@ -103,7 +103,7 @@ class PdfView(View):
         uploader = request.POST.get('upload_by')
         uploader_obj = CustomUser.objects.get(id = uploader)
 
-        if uploader_obj.user_type == 'instructor':
+        if uploader_obj.type == 'instructor':
             pdf_form = PdfForm(request.POST, request.FILES)
             if pdf_form.is_valid():
                 pdf_form.save()

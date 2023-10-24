@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from users.managers import CustomUserManager
 
-USER_TYPE = (
+TYPE = (
    ('admin' , 'Admin'),
    ('student' , 'Student'),
    ('instructor' , 'Instructor'),
@@ -15,10 +15,11 @@ class CustomUser(AbstractUser):
 
    username = None
    
-   phone_number = models.IntegerField(unique = True, null = True)
+   phone_number = models.IntegerField(unique = True, null = True, blank = True)
    email = models.EmailField(unique = True)
-   user_type = models.CharField(max_length = 100, 
-                                choices = USER_TYPE, default = 'Admin')
+   password = models.CharField(max_length = 255, blank = True)
+   type = models.CharField(max_length = 100, 
+                                choices = TYPE, default = 'Student')
 
    USERNAME_FIELD = 'email'
    REQUIRED_FIELDS = []

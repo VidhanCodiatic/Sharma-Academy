@@ -596,9 +596,9 @@ label.valid {
 
 
 
-#id_user_type {
+#id_type {
   /* background-color: #4CAF50; */
-  background-color: red;
+  background-color: green;
   color: white;
   padding: 16px;
   font-size: 16px;
