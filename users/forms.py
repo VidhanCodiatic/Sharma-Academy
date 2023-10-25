@@ -11,7 +11,7 @@ class RegisterForm(forms.ModelForm):
         widgets = {
             'password': forms.PasswordInput(),
         }
-        fields = ['email', 'phone_number', 'password', 'type']
+        fields = ['email', 'phone', 'password', 'type']
 
 class LoginForm(forms.ModelForm):
 

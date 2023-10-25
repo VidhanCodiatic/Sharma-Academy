@@ -15,11 +15,12 @@ class CustomUser(AbstractUser):
 
    username = None
    
-   phone_number = models.IntegerField(unique = True, null = True, blank = True)
+   phone = models.IntegerField(unique = True, null = True)
    email = models.EmailField(unique = True)
-   password = models.CharField(max_length = 255, blank = True)
+   password = models.CharField(max_length = 255)
    type = models.CharField(max_length = 100, 
                                 choices = TYPE, default = 'Student')
+   email_verified = models.BooleanField(default = False)
 
    USERNAME_FIELD = 'email'
    REQUIRED_FIELDS = []

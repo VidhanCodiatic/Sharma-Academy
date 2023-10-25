@@ -19,13 +19,13 @@
 
         <h1>second loop</h1>
 
+        <h1>Short Answer</h1>
         {% for q in questions %}
         {% if q.choice_set.all %}
             
         {% else %}
-        <h1>Short Answer</h1>
         <p>{{ q.question }}</p>
-        {{ form.as_p }}
+        {{ form.content }}
         {% endif %}
         {% endfor %}
 
@@ -35,11 +35,11 @@
 
 
 
-   <h2>Add Answer</h2>
+   {% comment %} <h2>Add Answer</h2>
    <form method="post" enctype="multipart/form-data">
        {{ formset.as_p }}
        {% csrf_token %}
        <button type="submit" >Save</button>
-   </form>
+   </form> {% endcomment %}
 </body>
 </html>

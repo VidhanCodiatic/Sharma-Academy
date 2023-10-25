@@ -26,12 +26,11 @@ class QuizView(View):
     template_name = "assessment/quiz.html"
 
     def get(self, request, *args, **kwargs):
-        AnswerFormSet = formset_factory(AnswerForm, extra=5)
-        formset = AnswerFormSet()
+        # AnswerFormSet = formset_factory(AnswerForm, extra=5)
+        # formset = AnswerFormSet()
         form = self.form_class()
         questions = Question.objects.all()
-        return render(request, self.template_name, {'questions' : questions, 'form' : form,
-                                                    'formset' : formset})
+        return render(request, self.template_name, {'questions' : questions, 'form' : form})
     
     def post(self, request, *args, **kwargs):
         score = 0
@@ -43,24 +42,6 @@ class QuizView(View):
                     score += 1
 
         return render(request, 'assessment/score.html', {'score' : score})
-
-
-# blog/views.py
-from django.forms import formset_factory
-
-def create_multiple_content(request):
-    AnswerFormSet = formset_factory(AnswerForm, extra=5)
-    formset = AnswerFormSet()
-    if request.method == 'POST':
-            formset = AnswerFormSet(request.POST, request.FILES)
-            if formset.is_valid():
-                for form in formset:
-                    if form.cleaned_data:
-                        content = form.save(commit=False)
-                        content.uploader = request.content
-                        content.save()
-                return HttpResponse('created')
-    return render(request, 'assessment/quiz.html', {'formset': formset})
 
 
 
