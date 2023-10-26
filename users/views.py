@@ -11,20 +11,19 @@ from django.views import View
 from django.contrib.auth import authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.conf import settings
 
-from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import login, authenticate  , get_user_model
-from django.contrib.sites.shortcuts import get_current_site  
 from django.utils.encoding import force_bytes, force_str 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
-from django.template.loader import render_to_string  
-# from users.tokens import account_activation_token  
-from django.core.mail import EmailMessage  
-# from .tokens import account_activation_token
 
+from django.views import View
+from django.core.mail import EmailMessage
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from users.tokens import email_verification_token
 
+User = settings.AUTH_USER_MODEL
 
 
 
@@ -41,14 +40,21 @@ class RegisterView(View):
         if form.is_valid():
             user = form.save(commit=False)
             user.password = make_password(user.password)
-            user.email_verified = False
+            user.is_active = False
 
             email = user.email
-            token = default_token_generator.make_token(user)
-            uid = urlsafe_base64_encode(force_bytes(user.id))
             user.save()
-            breakpoint()
-            send_mail_after_registration(email, uid, token)
+            current_site = get_current_site(self.request)
+            subject = 'Activate Your Account'
+            body = render_to_string(
+                'users/email_verification.html',
+                {
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': email_verification_token.make_token(user),
+                }
+            )
+            EmailMessage(to=[user.email], subject=subject, body=body).send()
             return redirect("/")
         else:
             return HttpResponse('Form is not valid')
@@ -91,74 +97,29 @@ def index(request):
 
 
 
-def send_mail_after_registration(email, uid, token):
-    subject = 'Your accounts need to be verified'
-    message = f'Hi paste the link to verify your account http://127.0.0.1:8000/verify/{uid}/{token}/'
-    email_from = settings.EMAIL_HOST_USER
-    recipient_list = [email]
-    send_mail(subject, message , email_from ,recipient_list )
+class ActivateView(View):
 
+    def get_user_from_email_verification(self, uid, token: str):
+        try:
+            uid = force_str(urlsafe_base64_decode(uid))
+            user = get_user_model().objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError,
+                get_user_model().DoesNotExist):
+            return None
 
+        if user is not None \
+                and \
+                email_verification_token.check_token(user, token):
+            return user
 
-def verify(request, uidb64, token):
-    try:
-        breakpoint()
-        uid = urlsafe_base64_decode(uidb64).decode()
-        print('uid:', uid)
-        user = CustomUser.objects.get(pk = uid)
-    except(TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
-        user = None
-    print(user)
-    print(token)
-    print(default_token_generator.check_token(user, token))
-    if user is not None and default_token_generator.check_token(user, token):
-        user.email_verified = True
+        return None
+
+    def get(self, request, uidb64, token):
+        user = self.get_user_from_email_verification(uidb64, token)
+        user.is_active = True
         user.save()
-        return redirect('/')
-    else:
-        return HttpResponse('invalid activation')
-
-
-
-
-# def verify_email(request, token):
-#     CustomUser = get_user_model()  
-#     try:
-#         # uid = force_str(urlsafe_base64_decode(uidb64))
-        
-#         # user = CustomUser.objects.get(pk = request.GET['id'])
-#         user = CustomUser.objects.get(pk = uidb64)
-
-#     except(TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
-#         return HttpResponse("invalid thing")
-    
-#     if default_token_generator.check_token(user, token):
-#         user.email_verified = True
-#         user.save()
-#         return HttpResponse('success page')
-#     else:
-#         return HttpResponse('invalid token page')
-
-
-    
-
-
-
-
-
-# def activate(request, uidb64, token):  
-#     CustomUser = get_user_model()  
-#     try:  
-#         uid = force_str(urlsafe_base64_decode(uidb64))  
-#         user = CustomUser.objects.get(pk=uid)  
-#     except(TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):  
-#         user = None  
-#     if user is not None and account_activation_token.check_token(user, token):  
-#         user.is_active = True  
-#         user.save()  
-#         return HttpResponse('Thank you for your email confirmation. Now you can login your account.')  
-#     else:  
-#         return HttpResponse('Activation link is invalid!')  
+        login(request, user)
+        return HttpResponse('activate successful')
 
 
 

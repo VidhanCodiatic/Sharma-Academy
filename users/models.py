@@ -20,7 +20,6 @@ class CustomUser(AbstractUser):
    password = models.CharField(max_length = 255)
    type = models.CharField(max_length = 100, 
                                 choices = TYPE, default = 'Student')
-   email_verified = models.BooleanField(default = False)
 
    USERNAME_FIELD = 'email'
    REQUIRED_FIELDS = []

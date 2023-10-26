@@ -1,0 +1,7 @@
+{% comment %} {% autoescape on %} {% endcomment %}
+<div>
+    <a href=
+    "http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">
+    Please activate your account</a>
+</div>
+{% comment %} {% endautoescape %}  {% endcomment %}
