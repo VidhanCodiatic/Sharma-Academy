@@ -2,32 +2,32 @@
 
 from django.shortcuts import render, redirect, HttpResponse
 
-from users.forms import RegisterForm, LoginForm
-from enrollment.forms import EnrollForm
-from django.contrib.auth.hashers import make_password, check_password
 from users.models import CustomUser
 from courses.models import Course, Lecture
+from users.forms import RegisterForm, LoginForm
+from enrollment.forms import EnrollForm
 from django.views import View
-from django.contrib.auth import authenticate
 from django.contrib import messages
+from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login, authenticate, get_user_model
 from django.conf import settings
 
-from django.contrib.auth import login, authenticate  , get_user_model
 from django.utils.encoding import force_bytes, force_str 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
-
-from django.views import View
-from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from users.tokens import email_verification_token
+
 
 User = settings.AUTH_USER_MODEL
 
 
 
 class RegisterView(View):
+    " User registration with mail confirmation "
     form_class = RegisterForm
     template_name = "users/registration.html"
 
@@ -42,7 +42,6 @@ class RegisterView(View):
             user.password = make_password(user.password)
             user.is_active = False
 
-            email = user.email
             user.save()
             current_site = get_current_site(self.request)
             subject = 'Activate Your Account'
@@ -55,9 +54,11 @@ class RegisterView(View):
                 }
             )
             EmailMessage(to=[user.email], subject=subject, body=body).send()
+            messages.success(request, 'verify your email.')
             return redirect("/")
         else:
-            return HttpResponse('Form is not valid')
+            messages.success(request, 'Please check email/phone | User already exists.')
+            return redirect("/register/")
 
     
 class LoginView(View):
@@ -75,13 +76,13 @@ class LoginView(View):
         email = payload.get('email', '')
         user_password = payload.get('password', '')
         user = authenticate(email = email, password = user_password)
-
         if user is None:
-            messages.success(request, 'Wrong password or email.')
+            messages.success(request, 'Please verify email or check email / password')
             return redirect('/')
-        self.template_name = "users/index.html"
-        return render(request, self.template_name, {"login_form" : login_form })
-    
+        else:
+            login(request, user)
+            self.template_name = "users/index.html"
+            return render(request, self.template_name, {"login_form" : login_form })    
 
 
 @login_required
@@ -119,7 +120,8 @@ class ActivateView(View):
         user.is_active = True
         user.save()
         login(request, user)
-        return HttpResponse('activate successful')
+        messages(request, 'email is verified')
+        return redirect('/')
 
 
 

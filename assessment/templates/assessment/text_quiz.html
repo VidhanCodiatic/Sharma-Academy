@@ -6,19 +6,8 @@
     <title>Quiz</title>
 </head>
 <body>
-    <form action="{% url "quiz" %}" method="post">
+    <form action="{% url "text_quiz" %}" method="post">
         {% csrf_token %}
-        {% for q in questions %}
-        {% if q.choice_set.all %}
-            <p>{{ q.question }}</p>
-            {% for c in q.choice_set.all %} {% comment %} choice_set is used for backward relation  {% endcomment %}
-                <input type="radio" name = "q_{{ q.id }}" value="{{ c.id }}">{{ c.option }}<br>
-            {% endfor %}
-        {% endif %}
-        {% endfor %}
-
-        <h1>second loop</h1>
-
         <h1>Short Answer</h1>
         {% for q in questions %}
         {% if q.choice_set.all %}

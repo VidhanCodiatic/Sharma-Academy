@@ -4,19 +4,19 @@ from courses.models import Course
 
 # Create your models here.
 
-ASSESSMENT_TYPE = (
+class Assessment(models.Model):
+
+    TYPE = (
     ('mcq', 'MCQ'),
     ('short_answer', 'Short_Answer'),
     ('essay', 'Essay'),
-)
-
-class Assessment(models.Model):
+    )
 
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     title = models.CharField(max_length = 100)
     duration = models.CharField(max_length = 100)
     type = models.CharField(max_length = 100, 
-                                 choices = ASSESSMENT_TYPE, default = 'mcq')
+                                 choices = TYPE, default = 'mcq')
     
     def __str__(self):
         return self.title

@@ -8,6 +8,6 @@ urlpatterns = [
     path('adddox/', DocumentView.as_view(), name = 'adddox'),
     path('addpdf/', PdfView.as_view(), name = 'addpdf'),
     path('showlectures/', ShowLectureView.as_view(), name = 'showlectures'),
-    path('showcourses', ShowCourseView.as_view(), name = 'showcourses'),
+    path('showcourses/', ShowCourseView.as_view(), name = 'showcourses'),
     path('index/', index, name = 'index1'),
 ]

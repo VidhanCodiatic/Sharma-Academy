@@ -22,11 +22,9 @@ class LectureView(View):
     def post(self, request, *args, **kwargs):
 
         lecture_form = self.form_class(request.POST)
+        user = request.user
 
-        uploader = request.POST.get('upload_by')
-        uploader_obj = CustomUser.objects.get(id = uploader)
-
-        if uploader_obj.type == 'instructor':
+        if user.type == 'instructor':
             lecture_form = LectureForm(request.POST, request.FILES)
             if lecture_form.is_valid():
                 lecture_form.save()
@@ -48,11 +46,9 @@ class EmbedLectureView(View):
     def post(self, request, *args, **kwargs):
 
         embed_form = self.form_class(request.POST)
+        user = request.user
 
-        uploader = request.POST.get('upload_by')
-        uploader_obj = CustomUser.objects.get(id = uploader)
-
-        if uploader_obj.type == 'instructor':
+        if user.type == 'instructor':
             embed_form = EmbedLectureForm(request.POST, request.FILES)
             if embed_form.is_valid():
                 embed_form.save()
@@ -73,11 +69,9 @@ class DocumentView(View):
     def post(self, request, *args, **kwargs):
 
         document_form = self.form_class(request.POST)
+        user = request.user
 
-        uploader = request.POST.get('upload_by')
-        uploader_obj = CustomUser.objects.get(id = uploader)
-
-        if uploader_obj.type == 'instructor':
+        if user.type == 'instructor':
             document_form = DocumentForm(request.POST, request.FILES)
             if document_form.is_valid():
                 document_form.save()
@@ -99,11 +93,9 @@ class PdfView(View):
     def post(self, request, *args, **kwargs):
 
         pdf_form = self.form_class(request.POST)
+        user = request.user
 
-        uploader = request.POST.get('upload_by')
-        uploader_obj = CustomUser.objects.get(id = uploader)
-
-        if uploader_obj.type == 'instructor':
+        if user.type == 'instructor':
             pdf_form = PdfForm(request.POST, request.FILES)
             if pdf_form.is_valid():
                 pdf_form.save()
