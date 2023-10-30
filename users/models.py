@@ -15,7 +15,7 @@ class CustomUser(AbstractUser):
 
    username = None
    
-   phone = models.IntegerField(unique = True, null = True)
+   phone = models.CharField(unique = True, null = True, max_length = 12)
    email = models.EmailField(unique = True)
    password = models.CharField(max_length = 255)
    type = models.CharField(max_length = 100, 

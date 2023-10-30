@@ -9,26 +9,17 @@
     <form action="{% url "text_quiz" %}" method="post">
         {% csrf_token %}
         <h1>Short Answer</h1>
-        {% for q in questions %}
-        {% if q.choice_set.all %}
-            
-        {% else %}
+        {{ formset.management_form }}
+        {% for q in assesment.question_set.all %}
         <p>{{ q.question }}</p>
-        {{ formset.as_p }}
-        {% endif %}
+            {% for form in formset %}
+                {% if forloop.counter == forloop.parentloop.counter %}
+                    {{form.as_p}}
+                {% endif %}
+            {% endfor %}
         {% endfor %}
         <br>
         <input type="submit" value="Submit">
     </form>
-
-
-
-
-   {% comment %} <h2>Add Answer</h2>
-   <form method="post" enctype="multipart/form-data">
-       {{ formset.as_p }}
-       {% csrf_token %}
-       <button type="submit" >Save</button>
-   </form> {% endcomment %}
 </body>
 </html>

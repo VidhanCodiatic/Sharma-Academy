@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from assessment.models import Question, Choice
+from assessment.models import Assessment, Question, Choice, Answer
 from assessment.forms import QuestionForm, AnswerForm, AssessmentForm, ChoiceForm
 from django.views import View
-from django.forms import formset_factory
+from django.forms import modelformset_factory
 
 
 class AssessmentView(View):
@@ -89,7 +89,7 @@ class QuizView(View):
     template_name = "assessment/quiz.html"
 
     def get(self, request, *args, **kwargs):
-        AnswerFormSet = formset_factory(AnswerForm)
+        AnswerFormSet = modelformset_factory(AnswerForm)
         formset = AnswerFormSet()
         # form = self.form_class()
         questions = Question.objects.all()
@@ -116,28 +116,26 @@ class TextquizView(View):
     template_name = "assessment/text_quiz.html"
 
     def get(self, request, *args, **kwargs):
-        AnswerFormSet = formset_factory(AnswerForm)
-        formset = AnswerFormSet()
-        # form = self.form_class()
+        assesment = Assessment.objects.last()
+        questions = assesment.question_set.all()
+        count = questions.count()
+        user = request.user
+        print("=================", user)
+        AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
+        formset = AnswerFormSet(queryset = Answer.objects.none())
         questions = Question.objects.all()
-        return render(request, self.template_name, {'questions' : questions, 'formset' : formset})
+        return render(request, self.template_name, {'questions' : questions, 'formset' : formset, 'assesment': assesment})
 
-
-# class PublicationCreateView(EdqmCreateView):
-#     """ Create publication with document form through formset """
-#     model = Publication
-#     template_name = 'freepub/publication/publication_form.html'
-
-#     def get_context_data(self, **kwargs):
-#         context = super(PublicationCreateView, self).get_context_data(**kwargs)
-#         context['DocumentFormSets'] = DocumentFormSets(self.request.POST or None, self.request.FILES or None)
-#         return context
-
-#     def form_valid(self, form):
-#         context = self.get_context_data()
-#         formsets = context['DocumentFormSets']
-#         if form.is_valid() and formsets.is_valid():
-#             self.object = form.save()
-#             formsets.instance = self.object
-#             formsets.save()
-#         return super(PublicationCreateView, self).form_valid(form)
+    def post(self, request, *args, **kwargs):
+        assesment = Assessment.objects.last()
+        questions = assesment.question_set.all()
+        count = questions.count()
+        # user = request.user
+        AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
+        formset = AnswerFormSet(request.POST, queryset = Answer.objects.none())
+        # formset = formset.forms.user == user
+        if formset.is_valid():
+            formset.save()
+            return HttpResponse('added')
+        
+        return HttpResponse('not added')

@@ -57,6 +57,7 @@ class RegisterView(View):
             messages.success(request, 'verify your email.')
             return redirect("/")
         else:
+            print('+++++++++', form.errors)
             messages.success(request, 'Please check email/phone | User already exists.')
             return redirect("/register/")
 
@@ -112,15 +113,16 @@ class ActivateView(View):
                 and \
                 email_verification_token.check_token(user, token):
             return user
-
-        return None
+        else:
+            return None
 
     def get(self, request, uidb64, token):
         user = self.get_user_from_email_verification(uidb64, token)
+        print("============================", user)
+        print(uidb64)
+        print(token)
         user.is_active = True
         user.save()
-        login(request, user)
-        messages(request, 'email is verified')
         return redirect('/')
 
 

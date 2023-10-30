@@ -1,6 +1,7 @@
 
 from django.db import models
 from courses.models import Course
+from users.models import CustomUser
 
 # Create your models here.
 
@@ -39,6 +40,7 @@ class Choice(models.Model):
         return self.option
 
 class Answer(models.Model):
-
+    
+    user = models.ForeignKey(CustomUser, on_delete = models.CASCADE, null = True)
     question = models.ForeignKey(Question, on_delete = models.CASCADE)
     content = models.TextField(blank=True)

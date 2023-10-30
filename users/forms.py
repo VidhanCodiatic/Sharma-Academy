@@ -10,6 +10,7 @@ class RegisterForm(forms.ModelForm):
         model = CustomUser
         widgets = {
             'password': forms.PasswordInput(),
+            'phone': forms.NumberInput(),
         }
         fields = ['email', 'phone', 'password', 'type']
 
