@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, HttpResponse
 
 from users.models import CustomUser
 from courses.models import Course, Lecture
+from assessment.models import Assessment
 from users.forms import RegisterForm, LoginForm
 from enrollment.forms import EnrollForm
 from django.views import View
@@ -27,7 +28,9 @@ User = settings.AUTH_USER_MODEL
 
 
 class RegisterView(View):
+
     " User registration with mail confirmation "
+
     form_class = RegisterForm
     template_name = "users/registration.html"
 
@@ -57,12 +60,14 @@ class RegisterView(View):
             messages.success(request, 'verify your email.')
             return redirect("/")
         else:
-            print('+++++++++', form.errors)
             messages.success(request, 'Please check email/phone | User already exists.')
             return redirect("/register/")
 
     
 class LoginView(View):
+
+    " Login here via email and password "
+    
     form_class = LoginForm
     template_name = "users/login.html"
 
@@ -90,16 +95,20 @@ class LoginView(View):
 def index(request):
     enroll_form = EnrollForm
     courses = Course.objects.all()
+    assessments = Assessment.objects.all()
     users = CustomUser.objects.all()
     upload_video = Lecture.objects.all()
     return render(request, 'users/index.html', {'courses' : courses,
                                                 'users' : users,
                                                 'upload_video' : upload_video,
-                                                'enroll_form' : enroll_form})
+                                                'enroll_form' : enroll_form,
+                                                'assessments' : assessments})
 
 
 
 class ActivateView(View):
+
+    " User's email verification "
 
     def get_user_from_email_verification(self, uid, token: str):
         try:
@@ -118,9 +127,6 @@ class ActivateView(View):
 
     def get(self, request, uidb64, token):
         user = self.get_user_from_email_verification(uidb64, token)
-        print("============================", user)
-        print(uidb64)
-        print(token)
         user.is_active = True
         user.save()
         return redirect('/')

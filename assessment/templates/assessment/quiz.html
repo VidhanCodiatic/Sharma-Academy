@@ -8,38 +8,27 @@
 <body>
     <form action="{% url "quiz" %}" method="post">
         {% csrf_token %}
-        {% for q in questions %}
-        {% if q.choice_set.all %}
-            <p>{{ q.question }}</p>
-            {% for c in q.choice_set.all %} {% comment %} choice_set is used for backward relation  {% endcomment %}
-                <input type="radio" name = "q_{{ q.id }}" value="{{ c.id }}">{{ c.option }}<br>
+        {% if questions %}
+            {% for q in questions %}
+                <p>{{ q.question }}</p>
+                {% for c in q.choice_set.all %}
+                    <input type="radio" name = "q_{{ q.id }}" value="{{ c.id }}">{{ c.option }}<br>
+                {% endfor %}
+                <br>
+                <input type="submit" value="Submit">
             {% endfor %}
-        {% endif %}
-        {% endfor %}
-
-        <h1>second loop</h1>
-
-        <h1>Short Answer</h1>
-        {% for q in questions %}
-        {% if q.choice_set.all %}
-            
         {% else %}
-        <p>{{ q.question }}</p>
-        {{ formset.as_p }}
+            <h1>No Questions Available if you are instructor please add questions first.</h1>
         {% endif %}
-        {% endfor %}
-        <br>
-        <input type="submit" value="Submit">
     </form>
-
-
-
-
-   {% comment %} <h2>Add Answer</h2>
-   <form method="post" enctype="multipart/form-data">
-       {{ formset.as_p }}
-       {% csrf_token %}
-       <button type="submit" >Save</button>
-   </form> {% endcomment %}
 </body>
 </html>
+
+
+{% comment %}                 
+                {% if q.choice_set.all %}
+                    <p>{{ q.question }}</p>
+                    {% for c in q.choice_set.all %}
+                    <input type="radio" name = "q_{{ q.id }}" value="{{ c.id }}">{{ c.option }}<br>
+                    {% endfor %}
+                {% endif %} {% endcomment %}

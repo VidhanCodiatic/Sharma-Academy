@@ -35,6 +35,7 @@ class Course(models.Model):
 class Lecture(models.Model):
 
     upload_by = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+    # instructor = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     title = models.CharField(max_length = 100, unique = True)    
     duration = models.CharField(max_length = 100)

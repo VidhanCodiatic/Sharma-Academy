@@ -13,10 +13,9 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name = 'register'),
     path('index/', index, name = 'index'),
     path('activate/<uidb64>/<token>', 
-         ActivateView.as_view(), 
-         name='activate'),
-    # path('verify/<token>/', verify, name = 'verify'),
-
+         ActivateView.as_view(), name='activate'),
+         
+    # forgot password urls
 
     path('password-reset/', PasswordResetView.as_view(template_name='users/password_reset.html'),name='password-reset'),
     path('password-reset/done/', PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'),name='password_reset_done'),

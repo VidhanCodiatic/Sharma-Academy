@@ -6,7 +6,7 @@
     <title>Quiz</title>
 </head>
 <body>
-    <form action="{% url "show-quiz" %}" method="post">
+    <form action="{% url "show-quiz" assessment.id %}" method="post">
         {% csrf_token %}
         {% if questions %}
             {{ formset.management_form }}
@@ -14,10 +14,10 @@
                     <p>{{ q }}</p>
                     {% for form in formset %}
                         {% if forloop.counter == forloop.parentloop.counter %}
-                            <input type='hidden' name="user" value="{{ user }}"/>
+                            <input type='hidden' name="{{form.user.name}}" value="{{ user }}"/>
                            {{ form.content }}
                            {{ form.question }}
-                            {{form.as_p}}
+                            {% comment %} {{form.as_p}} {% endcomment %}
                         {% endif %}
                     {% endfor %}
                 {% endfor %}

@@ -5,6 +5,16 @@ from assessment.forms import QuestionForm, AnswerForm, AssessmentForm, ChoiceFor
 from django.views import View
 from django.forms import modelformset_factory
 
+class ShowAssessmentView(View):
+
+    " Showing all assessment present in project "
+
+    template_name = 'assessment/assessment.html'
+
+    def get(self, request, *args, **kwargs):
+        assessment = Assessment.objects.all()
+        return render(request, self.template_name, {'assessment' : assessment})
+
 
 class AssessmentView(View):
 
@@ -89,11 +99,8 @@ class QuizView(View):
     template_name = "assessment/quiz.html"
 
     def get(self, request, *args, **kwargs):
-        AnswerFormSet = modelformset_factory(AnswerForm)
-        formset = AnswerFormSet()
-        # form = self.form_class()
         questions = Question.objects.all()
-        return render(request, self.template_name, {'questions' : questions, 'formset' : formset})
+        return render(request, self.template_name, {'questions' : questions})
     
     def post(self, request, *args, **kwargs):
         score = 0
@@ -107,7 +114,6 @@ class QuizView(View):
         return render(request, 'assessment/score.html', {'score' : score})
 
 
-
 class TextquizView(View):
 
     " Generate score for particular assessment "
@@ -116,15 +122,20 @@ class TextquizView(View):
     template_name = "assessment/text_quiz.html"
 
     def get(self, request, *args, **kwargs):
+        # if Assesment.objects.exists() == True:
+        #     print()
         assesment = Assessment.objects.last()
         questions = assesment.question_set.all()
         count = questions.count()
         user = request.user
         print("=================", user)
-        AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
-        formset = AnswerFormSet(queryset = Answer.objects.none())
-        questions = Question.objects.all()
-        return render(request, self.template_name, {'questions' : questions, 'formset' : formset, 'assesment': assesment})
+        if count == 0:
+            return HttpResponse('assessment doesnt have question now')
+        else:
+            AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
+            formset = AnswerFormSet(queryset = Answer.objects.none())
+            questions = Question.objects.all()
+            return render(request, self.template_name, {'questions' : questions, 'formset' : formset, 'assesment': assesment})
 
     def post(self, request, *args, **kwargs):
         assesment = Assessment.objects.last()
@@ -139,3 +150,42 @@ class TextquizView(View):
             return HttpResponse('added')
         
         return HttpResponse('not added')
+    
+
+class ShowQuizView(View):
+
+    " Showing quiz according to user request "
+
+    def get(self, request, *args, **kwargs):
+        assessment = Assessment.objects.get(id = self.kwargs['pk'])
+        if assessment.type == 'mcq':
+            questions = assessment.question_set.all()
+            return render(request, 'assessment/quiz.html', {'questions' : questions})
+        else:
+            questions = assessment.question_set.all()
+            count = questions.count()
+            user = request.user
+            AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
+            formset = AnswerFormSet(queryset = Answer.objects.none(),initial=[{"user": user,}])
+            return render(request, 'assessment/showquiz.html', {'questions' : questions, 
+                                                                 'formset' : formset,
+                                                                 'user' : user,
+                                                                 'assessment' : assessment,})
+                                                                 
+        
+    def post(self, request, *args, **kwargs):
+        assessment = Assessment.objects.get(id = self.kwargs['pk'])
+        if assessment.type == 'mcq':
+            questions = assessment.question_set.all()
+            return render(request, 'assessment/quiz.html', {'questions' : questions})
+        else:
+            questions = assessment.question_set.all()
+            count = questions.count()
+            AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
+            formset = AnswerFormSet(request.POST, queryset = Answer.objects.none())
+            print(formset.errors)
+            if formset.is_valid():
+                formset.save()
+                return HttpResponse('added')
+
+            return HttpResponse('not added')

@@ -19,6 +19,11 @@ class LectureForm(forms.ModelForm):
     class Meta:
         model = Lecture
         fields = '__all__'
+    
+
+    def __init__(self, *args, **kwargs):
+        super(LectureForm, self).__init__(*args, **kwargs)
+        self.fields['upload_by'].queryset = CustomUser.objects.filter(type = 'instructor')
 
 class PdfForm(forms.ModelForm):
 
@@ -26,14 +31,26 @@ class PdfForm(forms.ModelForm):
         model = Pdf
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super(PdfForm, self).__init__(*args, **kwargs)
+        self.fields['upload_by'].queryset = CustomUser.objects.filter(type = 'instructor')
+
 class EmbedLectureForm(forms.ModelForm):
 
     class Meta:
         model = EmbedLecture
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super(EmbedLectureForm, self).__init__(*args, **kwargs)
+        self.fields['upload_by'].queryset = CustomUser.objects.filter(type = 'instructor')
+
 class DocumentForm(forms.ModelForm):
 
     class Meta:
         model = Document
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(DocumentForm, self).__init__(*args, **kwargs)
+        self.fields['upload_by'].queryset = CustomUser.objects.filter(type = 'instructor')
