@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
-</head>
-<body>
-    <form action="{% url "quiz" %}" method="post">
+{% extends "users/base.html" %}
+{% load static %}
+{% block title %}Quiz{% endblock title %}
+{% block main %}
+
+<div class="main-form container">
+    <form action="{% url "show-quiz" assessment.id %}" method="post">
         {% csrf_token %}
         {% if questions %}
             {% for q in questions %}
@@ -21,14 +19,5 @@
             <h1>No Questions Available if you are instructor please add questions first.</h1>
         {% endif %}
     </form>
-</body>
-</html>
-
-
-{% comment %}                 
-                {% if q.choice_set.all %}
-                    <p>{{ q.question }}</p>
-                    {% for c in q.choice_set.all %}
-                    <input type="radio" name = "q_{{ q.id }}" value="{{ c.id }}">{{ c.option }}<br>
-                    {% endfor %}
-                {% endif %} {% endcomment %}
+</div>
+{% endblock main %}

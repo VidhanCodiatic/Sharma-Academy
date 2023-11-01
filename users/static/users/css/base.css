@@ -116,6 +116,27 @@
 
 
 
+#main{
+  margin-top: 70px;
+}
+
+.main-form{
+  width: 900px;
+  height: 650px;
+  background-color: #f8f3f6;
+  /* filter: brightness(90%); */
+  /* lighting-color: #ffffff; */
+  /* background-color: #ffffff; */
+  border-radius: 15px;
+  margin: auto;
+  margin-top: 10;
+  margin-bottom: 10;
+}
+
+.main-form.lighter{
+  filter: brightness(90%);
+}
+
 
 
 

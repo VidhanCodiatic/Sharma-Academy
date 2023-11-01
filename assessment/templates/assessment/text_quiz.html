@@ -14,9 +14,9 @@
                     <p>{{ q }}</p>
                     {% for form in formset %}
                         {% if forloop.counter == forloop.parentloop.counter %}
-                            <input type='hidden' name="user" value="{{ user }}"/>
+                            {% comment %} <input type='hidden' name="user" value="{{ user }}"/>
                            {{ form.content }}
-                           {{ form.question }}
+                           {{ form.question }} {% endcomment %}
                             {{form.as_p}}
                         {% endif %}
                     {% endfor %}

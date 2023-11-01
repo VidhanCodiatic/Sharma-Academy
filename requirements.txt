@@ -1,9 +1,29 @@
+aiohttp==3.8.6
+aiosignal==1.3.1
 asgiref==3.7.2
+async-timeout==4.0.3
+attrs==23.1.0
+auth0-python==4.5.0
+Authlib==1.2.1
 backports.zoneinfo==0.2.1
+certifi==2023.7.22
+cffi==1.16.0
+charset-normalizer==3.3.1
+cryptography==41.0.4
 Django==4.2.6
+django-crispy-forms==2.1
+Django-Verify-Email==2.0.3
+frozenlist==1.4.0
+idna==3.4
+multidict==6.0.4
+Pillow==10.1.0
+psycopg2==2.9.9
+pycparser==2.21
+PyJWT==2.8.0
+pyOpenSSL==23.2.0
+python-dotenv==1.0.0
+requests==2.31.0
 sqlparse==0.4.4
 typing-extensions==4.8.0
-
-authlib ~= 1.0
-python-dotenv ~= 0.19
-requests ~= 2.27
+urllib3==2.0.7
+yarl==1.9.2

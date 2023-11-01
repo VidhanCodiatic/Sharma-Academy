@@ -39,11 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Local apps
     'users',
-    'courses',
     'enrollment',
     'assessment',
+    # second way
+    'courses.apps.CoursesConfig',
+
+    # extra packages
+    'crispy_forms',
 ]
+
+# CRISPY_TEMPLATE_PACK = 'assessment'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -162,3 +170,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 ENV_FILE = find_dotenv()
 if ENV_FILE:
     load_dotenv(ENV_FILE)
+
+
+STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')

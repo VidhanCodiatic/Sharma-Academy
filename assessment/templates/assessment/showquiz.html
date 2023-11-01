@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz</title>
-</head>
-<body>
+{% extends "users/base.html" %}
+{% load static %}
+{% block title %}Text Quiz{% endblock title %}
+{% block main %}
+
+<div class="main-form container">
     <form action="{% url "show-quiz" assessment.id %}" method="post">
         {% csrf_token %}
         {% if questions %}
@@ -14,9 +12,9 @@
                     <p>{{ q }}</p>
                     {% for form in formset %}
                         {% if forloop.counter == forloop.parentloop.counter %}
-                            <input type='hidden' name="{{form.user.name}}" value="{{ user }}"/>
-                           {{ form.content }}
-                           {{ form.question }}
+                            <input type='hidden' name="{{form.prefix}}-user" value="{{ user }}"/>
+                            <input type='hidden' name="{{form.prefix}}-question" value="{{ q.id }}"/>
+                        {{ form.content }}
                             {% comment %} {{form.as_p}} {% endcomment %}
                         {% endif %}
                     {% endfor %}
@@ -37,5 +35,6 @@
             <h1>No Questions Available if you are instructor please add questions first.</h1>
         {% endif %}
     </form>
-</body>
-</html>
+</div>
+
+{% endblock main %}

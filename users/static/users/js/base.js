@@ -20,3 +20,19 @@ $('.carousel .carousel-item').each(function(){
         next.children(':first-child').clone().appendTo($(this));
       }
 });
+
+
+$('#courseid').onClick(function (e) {
+  e.preventDefault();
+
+  $.ajax({
+    type: "GET",
+    url: "{% url 'showcourses' %}",
+    success:function(response){ 
+      alert('showed'); 
+    },
+    error: function(response){
+      alert('error');
+    },
+  }) 
+});

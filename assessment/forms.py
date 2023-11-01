@@ -26,11 +26,15 @@ class AnswerForm(forms.ModelForm):
         model = Answer
         # fields = ['content']
         fields = '__all__'
-        # exclude = ('user',)
+        widgets = {
+            'question': forms.HiddenInput(),
+            'user': forms.HiddenInput()}
 
     # def __init__(self, *args, **kwargs):
-    #     # self.request = kwargs.pop('request')
+    #     user = kwargs.pop('user', None)
     #     super(AnswerForm, self).__init__(*args, **kwargs)
+    #     if user:
+    #         self.fields['user'].initial = user
 
             
     # def __init__(self, *args, **kwargs):
