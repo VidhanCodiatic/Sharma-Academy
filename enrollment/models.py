@@ -1,18 +1,24 @@
 
-from users.models import CustomUser
+
 from django.db import models
+from users.models import CustomUser
+from courses.models import Course
+from django.core import validators
 
-    
-class Enrollment(models.Model):
+class EnrolledCourse(models.Model):
 
-    user = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
-    enroll_no = models.IntegerField(default = 101, editable = False)
-    date = models.DateTimeField(auto_now_add = True)
-    update = models.DateTimeField(auto_now = True)
+    user = models.ForeignKey(CustomUser, on_delete = models.PROTECT)
+    course = models.ForeignKey(to = Course,
+        on_delete = models.PROTECT)
 
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            last_instance = Enrollment.objects.last()
-            if last_instance:
-                self.enroll_no = last_instance.enroll_no + 1
-            super(Enrollment, self).save(*args, **kwargs)
+    amount = models.IntegerField()
+    session_id = models.CharField(max_length = 200)
+
+    paid = models.BooleanField(default = False,
+        verbose_name = 'Payment Status')
+
+    created_on = models.DateTimeField(auto_now_add = True)
+    updated_on = models.DateTimeField(auto_now_add = True)
+
+    def __str__(self):
+        return self.course.name

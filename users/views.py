@@ -6,7 +6,7 @@ from users.models import CustomUser
 from courses.models import Course, Lecture
 from assessment.models import Assessment
 from users.forms import RegisterForm, LoginForm
-from enrollment.forms import EnrollForm
+# from enrollment.forms import EnrollForm
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate
@@ -21,6 +21,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from users.tokens import email_verification_token
+
 
 
 User = settings.AUTH_USER_MODEL
@@ -93,7 +94,6 @@ class LoginView(View):
 
 @login_required
 def index(request):
-    enroll_form = EnrollForm
     courses = Course.objects.all()
     assessments = Assessment.objects.all()
     users = CustomUser.objects.all()
@@ -101,8 +101,8 @@ def index(request):
     return render(request, 'users/index.html', {'courses' : courses,
                                                 'users' : users,
                                                 'upload_video' : upload_video,
-                                                'enroll_form' : enroll_form,
-                                                'assessments' : assessments})
+                                                'assessments' : assessments,
+                                                })
 
 
 

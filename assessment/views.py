@@ -168,7 +168,6 @@ class ShowQuizView(View):
             questions = assessment.question_set.all()
             count = questions.count()
             user = request.user.id
-            print(user)
             AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
             # AnswerFormSet.form = staticmethod(curry(AnswerForm, user=request.user.id))
             formset = AnswerFormSet(queryset = Answer.objects.none())
@@ -195,7 +194,6 @@ class ShowQuizView(View):
             AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
             # AnswerFormSet.form = staticmethod(curry(AnswerForm, user=request.user.id))
             formset = AnswerFormSet(request.POST, queryset = Answer.objects.none())
-            print(formset.errors)
             if formset.is_valid():
                 formset.save()
                 return HttpResponse('added')

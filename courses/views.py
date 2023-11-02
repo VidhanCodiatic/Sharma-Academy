@@ -6,7 +6,7 @@ from courses.forms import LectureForm, EmbedLectureForm, DocumentForm, PdfForm
 
 from users.models import CustomUser
 from courses.models import Lecture, EmbedLecture, Document, Pdf, Course
-
+from Sharma_Academy import settings
 
 # Create your views here.
 
@@ -124,9 +124,8 @@ class ShowCourseView(View):
     template_name = "courses/showCourses.html"
 
     def get(self, request, *args, **kwargs):
-        courses = Course.objects.all()
-        return render(request, self.template_name, {'courses' : courses})
-    
-def index(request):
-    courses = Course.objects.all()
-    return render(request, 'courses/index.html', {'courses' : courses})
+        course = Course.objects.get(id = self.kwargs['pk'])
+        stripe_publishable_key = settings.STRIPE_PUBLISHABLE_KEY
+        return render(request, self.template_name, {'course' : course, 
+                                            'stripe_publishable_key':stripe_publishable_key})
+        
