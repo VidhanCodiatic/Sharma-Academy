@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from assessment.models import Assessment, Question, Choice, Answer
 from assessment.forms import QuestionForm, AnswerForm, AssessmentForm, ChoiceForm
 from django.views import View
@@ -36,11 +36,11 @@ class AssessmentView(View):
         if user.type == 'instructor':
             if form.is_valid():
                 form.save()
-                return HttpResponse('added')
+                return JsonResponse({'message' : 'form submitted'})
             else:
-                return HttpResponse('not valid form')
+                return JsonResponse({'message' : 'data is not valid'})
         else:
-            return HttpResponse('not instructor')
+            return JsonResponse({'message' : 'user is not instructor'})
 
 
 class QuestionView(View):

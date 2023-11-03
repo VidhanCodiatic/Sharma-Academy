@@ -128,4 +128,7 @@ class ShowCourseView(View):
         stripe_publishable_key = settings.STRIPE_PUBLISHABLE_KEY
         return render(request, self.template_name, {'course' : course, 
                                             'stripe_publishable_key':stripe_publishable_key})
+    
+
+
         

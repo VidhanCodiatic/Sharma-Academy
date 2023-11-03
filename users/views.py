@@ -15,17 +15,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, get_user_model
 from django.conf import settings
 
-from django.utils.encoding import force_bytes, force_str 
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode  
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from users.tokens import email_verification_token
 
 
-
 User = settings.AUTH_USER_MODEL
-
 
 
 class RegisterView(View):
@@ -61,20 +59,21 @@ class RegisterView(View):
             messages.success(request, 'verify your email.')
             return redirect("/")
         else:
-            messages.success(request, 'Please check email/phone | User already exists.')
+            messages.success(
+                request, 'Please check email/phone | User already exists.')
             return redirect("/register/")
 
-    
+
 class LoginView(View):
 
     " Login here via email and password "
-    
+
     form_class = LoginForm
     template_name = "users/login.html"
 
     def get(self, request, *args, **kwargs):
         login_form = self.form_class()
-        return render(request, self.template_name, {"login_form" : login_form })
+        return render(request, self.template_name, {"login_form": login_form})
 
     def post(self, request, *args, **kwargs):
 
@@ -82,14 +81,14 @@ class LoginView(View):
         payload = request.POST
         email = payload.get('email', '')
         user_password = payload.get('password', '')
-        user = authenticate(email = email, password = user_password)
+        user = authenticate(email=email, password=user_password)
         if user is None:
-            messages.success(request, 'Please verify email or check email / password')
+            messages.success(
+                request, 'Please verify email or check email / password')
             return redirect('/')
         else:
             login(request, user)
-            self.template_name = "users/index.html"
-            return render(request, self.template_name, {"login_form" : login_form })    
+            return redirect('/index/')
 
 
 @login_required
@@ -98,12 +97,11 @@ def index(request):
     assessments = Assessment.objects.all()
     users = CustomUser.objects.all()
     upload_video = Lecture.objects.all()
-    return render(request, 'users/index.html', {'courses' : courses,
-                                                'users' : users,
-                                                'upload_video' : upload_video,
-                                                'assessments' : assessments,
+    return render(request, 'users/index.html', {'courses': courses,
+                                                'users': users,
+                                                'upload_video': upload_video,
+                                                'assessments': assessments,
                                                 })
-
 
 
 class ActivateView(View):
@@ -130,7 +128,6 @@ class ActivateView(View):
         user.is_active = True
         user.save()
         return redirect('/')
-
 
 
 # import json
@@ -185,7 +182,6 @@ class ActivateView(View):
 #     else:
 #         CustomUser.objects.create(email = email)
 #         return redirect(request.build_absolute_uri(reverse("user_detail")))
-
 
 
 # def authlogout(request):

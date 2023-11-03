@@ -4,11 +4,46 @@
 {% block main %}
 
 <div class="main-form container">
-    <form action="" method="post">
+
+    <h1>Add Assessment</h1>
+
+    <form action="" method="post" id="assessment-form">
         {% csrf_token %}
         {{form.as_p}}
-        <input type="submit" value = "Add">
+        <input type="submit" value = "Add" class="btn btn-primary">
     </form>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+<script>
+    $(document).ready(function (){
+        
+        $('#assessment-form').on('submit', function (e) {
+            e.preventDefault();
+            var data = $(this).serialize();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'add-assessment' %}",
+                data: data,
+                dataType: 'json',
+                success: function (response) {
+                    // if not valid user, alert the user
+                    console.log(response)
+                    if(!response["valid"]){
+                        alert("You cannot submit invalid data");
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock main %}
