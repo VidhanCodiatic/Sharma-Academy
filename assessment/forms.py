@@ -1,5 +1,5 @@
 from django import forms
-from assessment.models import Assessment, Question, Choice, Answer
+from assessment.models import Assessment, Question, Choice, Answer, Rating
 from users.models import CustomUser
 
 class AssessmentForm(forms.ModelForm):
@@ -27,8 +27,10 @@ class AnswerForm(forms.ModelForm):
         # fields = ['content']
         fields = '__all__'
         widgets = {
-            'question': forms.HiddenInput(),
-            'user': forms.HiddenInput()}
+            'question' : forms.HiddenInput(),
+            'user' : forms.HiddenInput(),
+            'rating' : forms.HiddenInput(),
+        }
 
     # def __init__(self, *args, **kwargs):
     #     user = kwargs.pop('user', None)
@@ -40,3 +42,15 @@ class AnswerForm(forms.ModelForm):
     # def __init__(self, *args, **kwargs):
     #     super(AnswerForm, self).__init__(*args, **kwargs)
     #     self.fields['user'].queryset = CustomUser.objects.filter(type = 'instructor')
+
+
+class RatingForm(forms.ModelForm):
+
+    class Meta:
+        model = Rating
+        fields = '__all__'
+
+        widgets = {
+            'user' : forms.HiddenInput(),
+            'assessment' : forms.HiddenInput(),
+        }

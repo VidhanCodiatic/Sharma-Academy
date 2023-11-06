@@ -1,5 +1,5 @@
 from django.urls import path
-from assessment.views import ShowAssessmentView, QuestionView, AssessmentView, ChoiceView, ShowQuizView
+from assessment.views import ShowAssessmentView, QuestionView, AssessmentView, ChoiceView, ShowQuizView, rating_quiz
 
 urlpatterns = [
     path('show-assessment/', ShowAssessmentView.as_view(), name = 'show-assessment'),
@@ -9,4 +9,5 @@ urlpatterns = [
     # path('quiz/', QuizView.as_view(), name = 'quiz'),
     # path('text-quiz/', TextquizView.as_view(), name = 'text_quiz'),
     path('show-quiz/<str:pk>/', ShowQuizView.as_view(), name = 'show-quiz'),
+    path('rating/', rating_quiz, name = 'rating'),
 ]

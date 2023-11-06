@@ -44,3 +44,12 @@ class Answer(models.Model):
     user = models.ForeignKey(CustomUser, on_delete = models.CASCADE, null = True)
     question = models.ForeignKey(Question, on_delete = models.CASCADE)
     content = models.TextField(blank=True)
+
+class Rating(models.Model):
+
+    user = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+    assessment = models.ForeignKey(Assessment, on_delete = models.CASCADE)
+    rating = models.IntegerField()
+    
+    def __str__(self):
+        return f'{self.user} rated {self.rating} star for {self.assessment}'

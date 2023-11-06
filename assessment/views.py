@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from assessment.models import Assessment, Question, Choice, Answer
-from assessment.forms import QuestionForm, AnswerForm, AssessmentForm, ChoiceForm
+from assessment.models import Assessment, Question, Choice, Answer, Rating
+from assessment.forms import QuestionForm, AnswerForm, AssessmentForm, ChoiceForm, RatingForm
 from django.views import View
 from django.forms import modelformset_factory
+from django.contrib import messages
 
 from functools import partial as curry
 
@@ -36,6 +37,7 @@ class AssessmentView(View):
         if user.type == 'instructor':
             if form.is_valid():
                 form.save()
+                messages.success(request, 'form submitted')
                 return JsonResponse({'message' : 'form submitted'})
             else:
                 return JsonResponse({'message' : 'data is not valid'})
@@ -187,7 +189,9 @@ class ShowQuizView(View):
                     select_option = Choice.objects.get(pk=select_option_id)
                     if select_option.correct:
                         score += 1
-            return render(request, 'assessment/score.html', {'score' : score})
+            form = RatingForm
+            return render(request, 'assessment/score.html', {'score' : score, 'form' : form,
+                                                             'assessment': assessment})
         else:
             questions = assessment.question_set.all()
             count = questions.count()
@@ -199,3 +203,18 @@ class ShowQuizView(View):
                 return HttpResponse('added')
 
             return HttpResponse('not added')
+        
+
+def rating_quiz(request):
+    if request.method == 'POST':
+        form = RatingForm(request.POST)
+        user = request.POST.get('user')
+        assessment = request.POST.get('assessment')
+        rating = request.POST.get('rating')
+        print(user, assessment, rating)
+        form = Rating(user = user, assessment = assessment, rating = rating)
+        breakpoint()
+        if form.is_valid():
+            form.save()
+            return HttpResponse('data save')
+        return HttpResponse('form not valid')

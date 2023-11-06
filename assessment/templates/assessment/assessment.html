@@ -1,15 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Show Assessment</title>
-</head>
-<body>
-<div class="main-form container">
-    {% for i in assessment %}
-        {{i}} {{i.type}} <br>
-    {% endfor %}
+
+
+{% extends "users/base.html" %}
+{% load static %}
+{% block title %}Assessment{% endblock title %}
+{% block main %}
+
+<div class="">
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Title</th>
+            <th scope="col">Type</th>
+            <th scope="col">Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in assessment %}
+          <tr>
+            <td>{{i.id}}</td>
+            <td><a href="{% url "show-quiz" i.id %}">{{i.title}}</a></td>
+            <td>{{i.type}}</td>
+            <td>{{i.duration}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    <div class="alert alert-info" id="msg" style="display : none">
+    </div>
 </div>
-</body>
-</html>
+
+
+{% endblock main %}
