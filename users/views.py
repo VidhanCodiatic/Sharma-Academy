@@ -28,7 +28,7 @@ User = settings.AUTH_USER_MODEL
 
 class RegisterView(View):
 
-    " User registration with mail confirmation "
+    """ User registration with mail confirmation """
 
     form_class = RegisterForm
     template_name = "users/registration.html"
@@ -38,6 +38,7 @@ class RegisterView(View):
         return render(request, self.template_name, {"form": form})
 
     def post(self, request, *args, **kwargs):
+
         form = self.form_class(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
@@ -66,7 +67,7 @@ class RegisterView(View):
 
 class LoginView(View):
 
-    " Login here via email and password "
+    """ Login here via email and password """
 
     form_class = LoginForm
     template_name = "users/login.html"
@@ -106,7 +107,7 @@ def index(request):
 
 class ActivateView(View):
 
-    " User's email verification "
+    """ User's email verification """
 
     def get_user_from_email_verification(self, uid, token: str):
         try:

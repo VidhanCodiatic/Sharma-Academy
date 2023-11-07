@@ -12,6 +12,9 @@ from Sharma_Academy import settings
 
 
 class LectureView(View):
+
+    """ Lecture create for courses """
+
     form_class = LectureForm
     template_name = "courses/addLecture.html"
 
@@ -36,6 +39,9 @@ class LectureView(View):
         
 
 class EmbedLectureView(View):
+
+    """ EmbedLecture create for courses """
+
     form_class = EmbedLectureForm
     template_name = "courses/addEmbedLecture.html"
 
@@ -59,6 +65,9 @@ class EmbedLectureView(View):
             return HttpResponse('not instructor')
 
 class DocumentView(View):
+
+    """ Documentation create for courses """
+
     form_class = DocumentForm
     template_name = "courses/addDocument.html"
 
@@ -83,6 +92,9 @@ class DocumentView(View):
 
 
 class PdfView(View):
+
+    """ Pdf create for courses """
+
     form_class = PdfForm
     template_name = "courses/addPdf.html"
 

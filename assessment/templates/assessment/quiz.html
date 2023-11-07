@@ -3,7 +3,7 @@
 {% block title %}Quiz{% endblock title %}
 {% block main %}
 
-<div class="main-form container">
+<div class="main container">
     <form action="{% url "show-quiz" assessment.id %}" method="post">
         {% csrf_token %}
         {% if questions %}
@@ -16,8 +16,10 @@
                 <input type="submit" value="Submit">
             {% endfor %}
         {% else %}
+        <div class="main-form container">
             <h1>No Questions Available if you are instructor please add questions first.</h1>
         {% endif %}
+        </div>
     </form>
 </div>
 {% endblock main %}

@@ -11,6 +11,7 @@
     <form action="{% url "rating" %}" method="post" id="rating-form">
         {% csrf_token %}
 
+        {{form}}
         <div class="card"> 
             <h1>Rating for Quiz</h1> 
             <br/> 
@@ -35,8 +36,8 @@
                 Rating is: 0/5 
             </h3> 
         </div> 
-        <input type="hidden" name="user" id="user" value="{{user}}">
-        <input type="hidden" name="assessment" id="assessment" value="{{assessment}}">
+        <input type="hidden" name="user" id="user" value="{{user.id}}">
+        <input type="hidden" name="assessment" id="assessment" value="{{assessment.id}}">
         <input type="hidden" name="rating" id="rating" value="{{n}}">
     </form>
 

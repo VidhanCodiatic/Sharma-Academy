@@ -1,12 +1,29 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
-from assessment.models import Assessment, Question, Choice, Answer, Rating
-from assessment.forms import QuestionForm, AnswerForm, AssessmentForm, ChoiceForm, RatingForm
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from assessment.utils import send_email_with_marks
 from django.views import View
 from django.forms import modelformset_factory
 from django.contrib import messages
+from django.core.paginator import Paginator
+from django.urls import reverse
 
-from functools import partial as curry
+from assessment.forms import (
+    QuestionForm, 
+    AnswerForm, 
+    AssessmentForm, 
+    ChoiceForm, 
+    RatingForm
+)
+
+from assessment.models import (
+    Assessment, 
+    Question, 
+    Choice, 
+    Answer, 
+    Rating
+)
+
+
 
 class ShowAssessmentView(View):
 
@@ -16,7 +33,12 @@ class ShowAssessmentView(View):
 
     def get(self, request, *args, **kwargs):
         assessment = Assessment.objects.all()
-        return render(request, self.template_name, {'assessment' : assessment})
+        assessment_per_page = 10
+        paginator = Paginator(assessment, assessment_per_page, orphans = 2)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        return render(request, self.template_name, {'assessment' : assessment,
+                                                    'page_obj' : page_obj})
 
 
 class AssessmentView(View):
@@ -190,6 +212,7 @@ class ShowQuizView(View):
                     if select_option.correct:
                         score += 1
             form = RatingForm
+            send_email_with_marks(request, score)
             return render(request, 'assessment/score.html', {'score' : score, 'form' : form,
                                                              'assessment': assessment})
         else:
@@ -208,13 +231,13 @@ class ShowQuizView(View):
 def rating_quiz(request):
     if request.method == 'POST':
         form = RatingForm(request.POST)
-        user = request.POST.get('user')
-        assessment = request.POST.get('assessment')
-        rating = request.POST.get('rating')
-        print(user, assessment, rating)
-        form = Rating(user = user, assessment = assessment, rating = rating)
-        breakpoint()
+        # user = request.POST.get('user')
+        # if Rating.objects.filter(user = user).exists():
+        #     return HttpResponse('user exists')
         if form.is_valid():
             form.save()
-            return HttpResponse('data save')
-        return HttpResponse('form not valid')
+            return HttpResponseRedirect(reverse("show-assessment"))
+        else:
+            return HttpResponseRedirect(reverse("index"))
+    
+

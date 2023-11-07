@@ -1,5 +1,11 @@
 from django.contrib import admin
-from assessment.models import Assessment, Question, Choice, Rating
+
+from assessment.models import (
+    Assessment, 
+    Question, 
+    Choice, 
+    Rating
+)
 
 # Register your models here.
 

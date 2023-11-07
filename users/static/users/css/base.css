@@ -132,6 +132,10 @@
   margin-top: 80;
   margin-bottom: 10;
 }
+.main{
+  margin-top: 80;
+  margin-bottom: 10;
+}
 
 .main-form.lighter{
   filter: brightness(90%);

@@ -1,6 +1,13 @@
+
 from django import forms
-from assessment.models import Assessment, Question, Choice, Answer, Rating
-from users.models import CustomUser
+
+from assessment.models import (
+    Assessment, 
+    Question, 
+    Choice, 
+    Answer, 
+    Rating
+)
 
 class AssessmentForm(forms.ModelForm):
 
@@ -53,4 +60,5 @@ class RatingForm(forms.ModelForm):
         widgets = {
             'user' : forms.HiddenInput(),
             'assessment' : forms.HiddenInput(),
+            'rating' : forms.HiddenInput(),
         }

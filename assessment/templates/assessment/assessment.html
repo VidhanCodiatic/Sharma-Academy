@@ -5,32 +5,48 @@
 {% block title %}Assessment{% endblock title %}
 {% block main %}
 
-<div class="">
 
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Title</th>
-            <th scope="col">Type</th>
-            <th scope="col">Duration</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for i in assessment %}
-          <tr>
-            <td>{{i.id}}</td>
-            <td><a href="{% url "show-quiz" i.id %}">{{i.title}}</a></td>
-            <td>{{i.type}}</td>
-            <td>{{i.duration}}</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+<div class="main-form container">
 
-    <div class="alert alert-info" id="msg" style="display : none">
+  <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Title</th>
+          <th scope="col">Type</th>
+          <th scope="col">Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in page_obj %}
+        <tr>
+          <td>{{a.id}}</td>
+          <td><a href="{% url "show-quiz" a.id %}">{{a.title}}</a></td>
+          <td>{{a.type}}</td>
+          <td>{{a.duration}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+  </table>
+
+  <div class="container p-4">
+    <div class="pagination justify-content-center">
+      <span class="step-links">
+        {% if page_obj.has_previous %}
+        <a href="?page=1" class="btn btn-primary">&laquo; first</a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-primary">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-primary">next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-primary">last &raquo;</a>
+        {% endif %}
+      </span>
     </div>
+  </div>
 </div>
-
-
 {% endblock main %}

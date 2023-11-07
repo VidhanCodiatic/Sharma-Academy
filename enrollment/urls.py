@@ -1,5 +1,14 @@
+
+
 from django.urls import path
-from enrollment.views import create_checkout_session, OrderHistoryListView, PaymentFailedView, PaymentSuccessView, stripe_webhook
+
+from enrollment.views import (
+    create_checkout_session, 
+    OrderHistoryListView, 
+    PaymentFailedView, 
+    PaymentSuccessView, 
+    stripe_webhook
+)
 
 urlpatterns = [
     path('success/', PaymentSuccessView.as_view(), name='success'),

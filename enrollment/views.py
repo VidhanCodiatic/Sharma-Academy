@@ -16,7 +16,9 @@ from Sharma_Academy import settings as paymentSetting
 
 @csrf_exempt
 def create_checkout_session(request, id):
-	
+
+    """ Checkout session for stripe payment """
+
     request_data = json.loads(request.body)
     course = get_object_or_404(Course, pk = id)
     
@@ -60,6 +62,9 @@ def create_checkout_session(request, id):
 
 
 class PaymentSuccessView(TemplateView):
+
+    """ Payment Success for stripe payment """
+
     template_name = "enrollment/payment_success.html"
 
     def get(self, request, *args, **kwargs):
@@ -76,10 +81,16 @@ class PaymentSuccessView(TemplateView):
         return render(request, self.template_name)
     
 class PaymentFailedView(TemplateView):
+
+    """ Payment Failed for stripe payment """
+
     template_name = "payments/payment_failed.html"
 
 @csrf_exempt
 def stripe_webhook(request):
+
+    """ Connect webhook with stripe payment """
+
     stripe.api_key = paymentSetting.STRIPE_SECRET_KEY
     endpoint_secret = paymentSetting.STRIPE_ENDPOINT_SECRET
     payload = request.body
