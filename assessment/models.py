@@ -9,7 +9,7 @@ class Assessment(models.Model):
 
     TYPE = (
     ('mcq', 'MCQ'),
-    ('short_answer', 'Short_Answer'),
+    ('short answer', 'Short Answer'),
     ('essay', 'Essay'),
     )
 

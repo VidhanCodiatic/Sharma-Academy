@@ -1,3 +1,4 @@
+from django.views.generic import ListView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from assessment.utils import send_email_with_marks
@@ -8,21 +9,20 @@ from django.core.paginator import Paginator
 from django.urls import reverse
 
 from assessment.forms import (
-    QuestionForm, 
-    AnswerForm, 
-    AssessmentForm, 
-    ChoiceForm, 
+    QuestionForm,
+    AnswerForm,
+    AssessmentForm,
+    ChoiceForm,
     RatingForm
 )
 
 from assessment.models import (
-    Assessment, 
-    Question, 
-    Choice, 
-    Answer, 
+    Assessment,
+    Question,
+    Choice,
+    Answer,
     Rating
 )
-
 
 
 class ShowAssessmentView(View):
@@ -34,11 +34,11 @@ class ShowAssessmentView(View):
     def get(self, request, *args, **kwargs):
         assessment = Assessment.objects.all()
         assessment_per_page = 10
-        paginator = Paginator(assessment, assessment_per_page, orphans = 2)
+        paginator = Paginator(assessment, assessment_per_page, orphans=2)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
-        return render(request, self.template_name, {'assessment' : assessment,
-                                                    'page_obj' : page_obj})
+        return render(request, self.template_name, {'assessment': assessment,
+                                                    'page_obj': page_obj})
 
 
 class AssessmentView(View):
@@ -50,8 +50,8 @@ class AssessmentView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, {'form' : form})
-    
+        return render(request, self.template_name, {'form': form})
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         user = request.user
@@ -59,12 +59,11 @@ class AssessmentView(View):
         if user.type == 'instructor':
             if form.is_valid():
                 form.save()
-                messages.success(request, 'form submitted')
-                return JsonResponse({'message' : 'form submitted'})
+                return JsonResponse({'message': 'form submitted'})
             else:
-                return JsonResponse({'message' : 'data is not valid'})
+                return JsonResponse({'message': 'data is not valid'})
         else:
-            return JsonResponse({'message' : 'user is not instructor'})
+            return JsonResponse({'message': 'user is not instructor'})
 
 
 class QuestionView(View):
@@ -76,8 +75,8 @@ class QuestionView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, {'form' : form})
-    
+        return render(request, self.template_name, {'form': form})
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         user = request.user
@@ -101,8 +100,8 @@ class ChoiceView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, {'form' : form})
-    
+        return render(request, self.template_name, {'form': form})
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         user = request.user
@@ -127,7 +126,7 @@ class ChoiceView(View):
 #     def get(self, request, *args, **kwargs):
 #         questions = Question.objects.all()
 #         return render(request, self.template_name, {'questions' : questions})
-    
+
 #     def post(self, request, *args, **kwargs):
 #         score = 0
 #         for q in Question.objects.all():
@@ -174,35 +173,35 @@ class ChoiceView(View):
 #         if formset.is_valid():
 #             formset.save()
 #             return HttpResponse('added')
-        
+
 #         return HttpResponse('not added')
-    
+
 
 class ShowQuizView(View):
 
     " Showing quiz according to user request "
 
     def get(self, request, *args, **kwargs):
-        assessment = Assessment.objects.get(id = self.kwargs['pk'])
+        assessment = Assessment.objects.get(id=self.kwargs['pk'])
         if assessment.type == 'mcq':
             questions = assessment.question_set.all()
-            return render(request, 'assessment/quiz.html', {'questions' : questions,
-                                                            'assessment' : assessment,})
+            return render(request, 'assessment/quiz.html', {'questions': questions,
+                                                            'assessment': assessment, })
         else:
             questions = assessment.question_set.all()
             count = questions.count()
             user = request.user.id
-            AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
+            AnswerFormSet = modelformset_factory(
+                Answer, form=AnswerForm, extra=count)
             # AnswerFormSet.form = staticmethod(curry(AnswerForm, user=request.user.id))
-            formset = AnswerFormSet(queryset = Answer.objects.none())
-            return render(request, 'assessment/showquiz.html', {'questions' : questions, 
-                                                                 'formset' : formset,
-                                                                 'user' : user,
-                                                                 'assessment' : assessment,})
-                                                                 
-        
+            formset = AnswerFormSet(queryset=Answer.objects.none())
+            return render(request, 'assessment/showquiz.html', {'questions': questions,
+                                                                'formset': formset,
+                                                                'user': user,
+                                                                'assessment': assessment, })
+
     def post(self, request, *args, **kwargs):
-        assessment = Assessment.objects.get(id = self.kwargs['pk'])
+        assessment = Assessment.objects.get(id=self.kwargs['pk'])
         if assessment.type == 'mcq':
             score = 0
             for q in Question.objects.all():
@@ -213,20 +212,22 @@ class ShowQuizView(View):
                         score += 1
             form = RatingForm
             send_email_with_marks(request, score)
-            return render(request, 'assessment/score.html', {'score' : score, 'form' : form,
+            return render(request, 'assessment/score.html', {'score': score, 'form': form,
                                                              'assessment': assessment})
         else:
             questions = assessment.question_set.all()
             count = questions.count()
-            AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
+            AnswerFormSet = modelformset_factory(
+                Answer, form=AnswerForm, extra=count)
             # AnswerFormSet.form = staticmethod(curry(AnswerForm, user=request.user.id))
-            formset = AnswerFormSet(request.POST, queryset = Answer.objects.none())
+            formset = AnswerFormSet(
+                request.POST, queryset=Answer.objects.none())
             if formset.is_valid():
                 formset.save()
                 return HttpResponse('added')
 
             return HttpResponse('not added')
-        
+
 
 def rating_quiz(request):
     if request.method == 'POST':
@@ -239,5 +240,8 @@ def rating_quiz(request):
             return HttpResponseRedirect(reverse("show-assessment"))
         else:
             return HttpResponseRedirect(reverse("index"))
-    
 
+
+class QuestionListView(ListView):
+    model = Question
+    template_name = "assessment/question.html"

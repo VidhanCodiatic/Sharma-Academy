@@ -11,7 +11,6 @@
   <table class="table">
       <thead>
         <tr>
-          <th scope="col">Id</th>
           <th scope="col">Title</th>
           <th scope="col">Type</th>
           <th scope="col">Duration</th>
@@ -20,7 +19,6 @@
       <tbody>
         {% for a in page_obj %}
         <tr>
-          <td>{{a.id}}</td>
           <td><a href="{% url "show-quiz" a.id %}">{{a.title}}</a></td>
           <td>{{a.type}}</td>
           <td>{{a.duration}}</td>

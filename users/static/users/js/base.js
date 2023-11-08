@@ -1,5 +1,4 @@
 
-
 // courses show carousal js start 
 
 var myCarousel = document.querySelector('#myCarousel')
@@ -26,37 +25,6 @@ $('.carousel .carousel-item').each(function(){
 });
 
 // courses shown carousal js end
-
-// add assessment ajax start
-
-$(document).ready(function (){
-        
-  $('#assessment-form').on('submit', function (e) {
-      e.preventDefault();
-
-      $.ajax({
-          type: 'POST',
-          url: '{% url "add-assessment" %}',
-          data: $(this).serialize(),
-          success: function (data) {
-              if (data.errors) {
-                  console.log('Data errors:- ', data.errors)
-              } else {
-                  console.log('Data:- ', data)
-                  //$('#assessment-form')[0].reset();
-                  $("#assessment-form").trigger("reset");
-                  $("#msg").text("form submitted successfully");
-                  $("#msg").show();
-              }
-          },
-          error: function (xhr) {
-              console.log(xhr)
-          }
-      });
-  });
-});
-
-// add assessment ajax end 
 
 // rating js for css start
 

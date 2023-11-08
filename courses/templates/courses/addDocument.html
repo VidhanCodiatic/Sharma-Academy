@@ -9,7 +9,34 @@
     <form action = "{% url "adddox" %}" method = "post" enctype="multipart/form-data">
         {% csrf_token %}
         {{document_form.as_p}}
-        <input type = "submit", value = "Add Document">
+
+      <div class="form-group">
+        <label for="user">User :- </label>
+        <select class="form-control" id="user" name = "{{form.user.name}}">
+          {% for u in form.user %}
+          <option value="{{u.id}}">{{u}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="title">Title :-</label>
+        <input type="text" class="form-control" name="{{form.title.name}}" id="title"
+          placeholder="Title"/>
+      </div>
+      <div class="form-group">
+        <label for="duration">Duration :-</label>
+        <input type="number" class="form-control" name="{{form.duration.name}}" id="duration"
+          placeholder="Time in minutes"/>
+      </div>
+      <div class="form-group">
+        <label for="type">Type :- </label>
+        <select class="form-control" id="type" name="{{form.type.name}}">
+          {% for t in form.type %}
+          <option value="{{t.id}}">{{t}}</option>
+          {% endfor %}
+        </select>
+      </div>
+        <input type = "submit", value = "Add Document"  class="btn btn-primary">
     </form>
 </div>
 
