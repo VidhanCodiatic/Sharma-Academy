@@ -11,7 +11,7 @@ class Course(models.Model):
         ('3 months', '3 months'),
     )
 
-    MODE_TYPE = (
+    TYPE = (
         ('online', 'Online'),
         ('blended', 'Blended'),
         ('offline', 'Offline'),
@@ -23,9 +23,8 @@ class Course(models.Model):
     duration = models.CharField(max_length = 100, 
                                        choices = DURATION, default = '3 months')
     fees = models.IntegerField()
-    mode_type = models.CharField(max_length = 100, 
-                                 choices = MODE_TYPE, default = 'offline')
-    # type
+    type = models.CharField(max_length = 100, 
+                                 choices = TYPE, default = 'offline')
     description = models.CharField(max_length = 255)
     
     def __str__(self) -> str:
@@ -33,8 +32,7 @@ class Course(models.Model):
 
 class Lecture(models.Model):
 
-    upload_by = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
-    # instructor = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+    instructor = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     title = models.CharField(max_length = 100, unique = True)    
     duration = models.CharField(max_length = 100)
@@ -45,35 +43,32 @@ class Lecture(models.Model):
     
 class Pdf(models.Model):
 
-    upload_by = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
-    # instructor = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+    instructor = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     title = models.CharField(max_length = 100)    
     page = models.IntegerField()
-    pdfFile = models.FileField(upload_to = 'files/')
+    file = models.FileField(upload_to = 'files/')
     
     def __str__(self):
         return self.title
 
 class EmbedLecture(models.Model):
 
-    upload_by = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
-    # instructor = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+    instructor = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     title = models.CharField(max_length = 100)
     duration = models.CharField(max_length = 100)
-    lectureUrl = models.URLField()
+    url = models.URLField()
 
     def __str__(self):
         return self.title
     
 class Document(models.Model):
 
-    upload_by = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
-        # instructor = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
+    instructor = models.ForeignKey(CustomUser, on_delete = models.CASCADE)
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     title = models.CharField(max_length = 100)
-    documentUrl = models.URLField()
+    url = models.URLField()
 
     def __str__(self):
         return self.title

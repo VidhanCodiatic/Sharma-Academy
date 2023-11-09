@@ -13,13 +13,23 @@
                     <input type="radio" name = "q_{{ q.id }}" value="{{ c.id }}">{{ c.option }}<br>
                 {% endfor %}
                 <br>
-                <input type="submit" value="Submit">
             {% endfor %}
+            <input type="submit" value="Submit" class="btn btn-primary">
         {% else %}
         <div class="main-form container">
-            <h1>No Questions Available if you are instructor please add questions first.</h1>
+            <h1 id="contain">No Questions Available if you are instructor please add questions first.</h1>
         {% endif %}
         </div>
     </form>
+    {% if messages %}
+
+    {% for message in messages %}
+    <div class="alert alert-info">
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% endif %}
 </div>
 {% endblock main %}
+

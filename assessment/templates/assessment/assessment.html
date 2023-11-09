@@ -14,14 +14,18 @@
           <th scope="col">Title</th>
           <th scope="col">Type</th>
           <th scope="col">Duration</th>
+          <th scope="col">Rating</th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
         {% for a in page_obj %}
         <tr>
-          <td><a href="{% url "show-quiz" a.id %}">{{a.title}}</a></td>
+          <td>{{a.title}}</td>
           <td>{{a.type}}</td>
           <td>{{a.duration}}</td>
+          <td>5</td>
+          <td><a href="{% url "show-quiz" a.id %}" class="btn btn-primary">Start</a></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -46,5 +50,15 @@
       </span>
     </div>
   </div>
+
+  {% if messages %}
+
+  {% for message in messages %}
+  <div class="alert alert-info">
+      {{ message }}
+  </div>
+  {% endfor %}
+
+  {% endif %}
 </div>
 {% endblock main %}

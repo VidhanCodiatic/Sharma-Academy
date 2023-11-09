@@ -21,6 +21,15 @@
           </div>
           <input type="submit" value = "Add Question" class="btn btn-primary">
     </form>
+    {% if messages %}
+
+    {% for message in messages %}
+    <div class="alert alert-info">
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% endif %}
 </div>
 
 {% endblock main %}

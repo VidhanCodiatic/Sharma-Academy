@@ -1,6 +1,6 @@
 
 
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect
 
 from users.models import CustomUser
 from courses.models import Course, Lecture
@@ -21,6 +21,11 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from users.tokens import email_verification_token
+
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.urls import reverse
+from django.contrib.auth import logout
 
 
 User = settings.AUTH_USER_MODEL
@@ -128,7 +133,15 @@ class ActivateView(View):
         user = self.get_user_from_email_verification(uidb64, token)
         user.is_active = True
         user.save()
-        return redirect('/')
+        return HttpResponseRedirect(reverse('login'))
+
+    
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('login'))
+
 
 
 # import json

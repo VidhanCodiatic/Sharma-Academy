@@ -33,7 +33,7 @@ class ShowAssessmentView(View):
 
     def get(self, request, *args, **kwargs):
         assessment = Assessment.objects.all()
-        assessment_per_page = 10
+        assessment_per_page = 5
         paginator = Paginator(assessment, assessment_per_page, orphans=2)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
@@ -59,9 +59,9 @@ class AssessmentView(View):
         if user.type == 'instructor':
             if form.is_valid():
                 form.save()
-                return JsonResponse({'message': 'form submitted'})
+                return JsonResponse({'message': 'Assessment added successfully'})
             else:
-                return JsonResponse({'message': 'data is not valid'})
+                return JsonResponse({'message': 'Assessment added failed'})
         else:
             return JsonResponse({'message': 'user is not instructor'})
 
@@ -84,11 +84,14 @@ class QuestionView(View):
         if user.type == 'instructor':
             if form.is_valid():
                 form.save()
-                return HttpResponse('added')
+                messages.error(request, 'Question added successfully.')
+                return HttpResponseRedirect(reverse('question'))
             else:
-                return HttpResponse('not valid form')
+                messages.error(request, 'Question add failed.')
+                return HttpResponseRedirect(reverse('question'))
         else:
-            return HttpResponse('not instructor')
+            messages.error(request, 'User is not instructor.')
+            return HttpResponseRedirect(reverse('question'))
 
 
 class ChoiceView(View):
@@ -109,11 +112,14 @@ class ChoiceView(View):
         if user.type == 'instructor':
             if form.is_valid():
                 form.save()
-                return HttpResponse('added')
+                messages.success(request, 'Choice added successfully.')
+                return HttpResponseRedirect(reverse('choice'))
             else:
-                return HttpResponse('not valid form')
+                messages.success(request, 'Choice add Failed.')
+                return HttpResponseRedirect(reverse('choice'))
         else:
-            return HttpResponse('not instructor')
+            messages.error(request, 'User is not instructor.')
+            return HttpResponseRedirect(reverse('choice'))
 
 
 # class QuizView(View):
@@ -212,6 +218,7 @@ class ShowQuizView(View):
                         score += 1
             form = RatingForm
             send_email_with_marks(request, score)
+            messages.success(request, 'Answer submmited successfully. Check your email for score.')
             return render(request, 'assessment/score.html', {'score': score, 'form': form,
                                                              'assessment': assessment})
         else:
@@ -224,9 +231,10 @@ class ShowQuizView(View):
                 request.POST, queryset=Answer.objects.none())
             if formset.is_valid():
                 formset.save()
-                return HttpResponse('added')
-
-            return HttpResponse('not added')
+                messages.success(request, 'Assessment submited successfully.')
+                return HttpResponseRedirect(reverse("show-assessment"))
+            messages.success(request, 'Assessment submit failed.')
+            return HttpResponseRedirect(reverse("show-assessment"))
 
 
 def rating_quiz(request):
@@ -237,8 +245,10 @@ def rating_quiz(request):
         #     return HttpResponse('user exists')
         if form.is_valid():
             form.save()
+            messages.success(request, 'Answer submmited successfully.')
             return HttpResponseRedirect(reverse("show-assessment"))
         else:
+            messages.success(request, 'Choice add Failed.')
             return HttpResponseRedirect(reverse("index"))
 
 

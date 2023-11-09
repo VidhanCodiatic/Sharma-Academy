@@ -43,6 +43,16 @@
 
     <div class = "alert alert-info" id = "msg" style = "display : none">
     </div>
+
+    {% if messages %}
+
+    {% for message in messages %}
+    <div class="alert alert-info">
+        {{ message }}
+    </div>
+    {% endfor %}
+  
+    {% endif %}
 </div>
 
 {% endblock main %}

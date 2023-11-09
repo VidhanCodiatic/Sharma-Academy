@@ -135,6 +135,12 @@
 .main{
   margin-top: 80;
   margin-bottom: 10;
+  background-color: #f8f3f6;
+}
+
+#contain{
+  padding-top:200px ;
+  color: #007bff;
 }
 
 .main-form.lighter{
