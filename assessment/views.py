@@ -7,6 +7,7 @@ from django.forms import modelformset_factory
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.urls import reverse
+from django.db.models import Avg
 
 from assessment.forms import (
     QuestionForm,
@@ -32,7 +33,7 @@ class ShowAssessmentView(View):
     template_name = 'assessment/assessment.html'
 
     def get(self, request, *args, **kwargs):
-        assessment = Assessment.objects.all()
+        assessment = Assessment.objects.all().annotate(avg_rating = Avg('rating__rating', default = 0))
         assessment_per_page = 5
         paginator = Paginator(assessment, assessment_per_page, orphans=2)
         page_number = request.GET.get("page")
@@ -231,8 +232,10 @@ class ShowQuizView(View):
                 request.POST, queryset=Answer.objects.none())
             if formset.is_valid():
                 formset.save()
+                form = RatingForm
                 messages.success(request, 'Assessment submited successfully.')
-                return HttpResponseRedirect(reverse("show-assessment"))
+                return render(request, 'assessment/score.html', {'form': form,
+                                                             'assessment': assessment})
             messages.success(request, 'Assessment submit failed.')
             return HttpResponseRedirect(reverse("show-assessment"))
 
@@ -240,18 +243,23 @@ class ShowQuizView(View):
 def rating_quiz(request):
     if request.method == 'POST':
         form = RatingForm(request.POST)
-        # user = request.POST.get('user')
-        # if Rating.objects.filter(user = user).exists():
-        #     return HttpResponse('user exists')
         if form.is_valid():
             form.save()
-            messages.success(request, 'Answer submmited successfully.')
+            messages.success(request, 'Rating submmited successfully.')
             return HttpResponseRedirect(reverse("show-assessment"))
         else:
-            messages.success(request, 'Choice add Failed.')
-            return HttpResponseRedirect(reverse("index"))
+            messages.error(request, 'Assessment Rating Failed.')
+            return HttpResponseRedirect(reverse("show-assessment"))
 
 
 class QuestionListView(ListView):
     model = Question
     template_name = "assessment/question.html"
+
+
+
+    # rattings = Ratting.objects.filter(product__image__id=pk).order_by('-id')[:5]
+    #     average_rating = rattings.aggregate(Avg('ratting'))['ratting__avg']
+          
+    #     return render(request, 'customer/product_detail.html', {"products":products,
+    #             "img":img, 'category':category, 'dict1':dict1, "flag":flag, "stripe_publishable_key":stripe_publishable_key, "average_rating":round(average_rating) if average_rating else 0,"rattings":rattings})

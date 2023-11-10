@@ -23,7 +23,7 @@ assessment{% endblock title %} {% block main %}
       </div>
       <div class="form-group">
         <label for="duration">Duration :-</label>
-        <input type="number" class="form-control" name="{{form.duration.name}}" id="duration"
+        <input type="time" class="form-control" name="{{form.duration.name}}" id="duration"
           placeholder="Time in minutes"/>
       </div>
       <div class="form-group">
@@ -40,39 +40,9 @@ assessment{% endblock title %} {% block main %}
 
   <div class="alert alert-info" id="msg" style="display: none"></div>
 
-  {% comment %}
-  <p><span id="min">02</span>:<span id="sec">00</span></p>
-  <button id="timer" onclick="start_timer()">start</button> {% endcomment %}
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script src="{% static 'assessment/js/addassessment.js' %}"></script>
-{% comment %}
-<script>
-  function start_timer() {
-    var a = 2;
-    a--;
-    document.getElementById("min").innerHTML = a;
-    var b = 60;
-    document.getElementById("sec").innerHTML = b;
-    setInterval(stat, 60000);
-    function stat() {
-      if (a >= 1) {
-        a--;
-        document.getElementById("min").innerHTML = a;
-      }
-    }
-    setInterval(sec, 1000);
-    function sec() {
-      if (b >= 1) {
-        b--;
-        document.getElementById("sec").innerHTML = b;
-      }
-      if (a != 0 && b == 0) {
-        b = 60;
-      }
-    }
-  }
-</script>
-{% endcomment %} {% endblock main %}
+{% endblock main %}

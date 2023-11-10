@@ -1,7 +1,6 @@
-{% comment %} {% autoescape on %} {% endcomment %}
 <div>
-    <a href=
-    "http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">
-    Please activate your account</a>
+    <h1>Click on verify button to activate your account</h1>
+    <a href="/">
+    Verify</a>
+    <h1>http://{{ domain }}{% url 'activate' uidb64=uid token=token %}</h1>
 </div>
-{% comment %} {% endautoescape %}  {% endcomment %}

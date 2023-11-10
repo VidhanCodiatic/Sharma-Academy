@@ -18,7 +18,8 @@ from django.conf import settings
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 from users.tokens import email_verification_token
 
@@ -53,7 +54,7 @@ class RegisterView(View):
             user.save()
             current_site = get_current_site(self.request)
             subject = 'Activate Your Account'
-            body = render_to_string(
+            html_content = render_to_string(
                 'users/email_verification.html',
                 {
                     'domain': current_site.domain,
@@ -61,12 +62,17 @@ class RegisterView(View):
                     'token': email_verification_token.make_token(user),
                 }
             )
-            EmailMessage(to=[user.email], subject=subject, body=body).send()
+            plain_text = strip_tags(html_content) 
+            message = EmailMultiAlternatives(to=[user.email], subject=subject, body=plain_text)
+            message.content_subtype = "html"
+            message.send()
             messages.success(request, 'verify your email.')
             return redirect("/")
         else:
-            messages.success(
-                request, 'Please check email/phone | User already exists.')
+            print(form.errors)
+            err = form.errors
+            messages.error(
+                request, err)
             return redirect("/register/")
 
 
