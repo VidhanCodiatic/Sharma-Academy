@@ -14,6 +14,9 @@ class AssessmentForm(forms.ModelForm):
     class Meta:
         model = Assessment
         fields = '__all__'
+        # widgets = {
+        #     'duration' : forms.TextInput(attrs={'class':'durationInputWidget'})
+        # }
 
 class QuestionForm(forms.ModelForm):
 

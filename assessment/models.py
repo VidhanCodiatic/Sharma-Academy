@@ -15,7 +15,8 @@ class Assessment(models.Model):
 
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     title = models.CharField(max_length = 100)
-    duration = models.CharField(max_length = 100)
+    # duration = models.CharField(max_length = 100)
+    duration = models.DurationField()
     type = models.CharField(max_length = 100, 
                                  choices = TYPE, default = 'mcq')
     

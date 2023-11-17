@@ -7,6 +7,7 @@ from courses.forms import LectureForm, EmbedLectureForm, DocumentForm, PdfForm
 from django.contrib import messages
 from courses.models import Lecture, EmbedLecture, Document, Pdf, Course
 from Sharma_Academy import settings
+from django.core.paginator import Paginator
 from django.urls import reverse
 
 
@@ -128,18 +129,22 @@ class PdfView(View):
             messages.error(request, 'User is not instructor.')
             return HttpResponseRedirect(reverse('addpdf'))
 
-
 class ShowLectureView(View):
     template_name = "courses/showLectures.html"
 
     def get(self, request, *args, **kwargs):
-        upload_video = Lecture.objects.all()
-        embed_video = EmbedLecture.objects.all()
+        videoLecture = Lecture.objects.all()
+        video_per_page = 2
+        paginator = Paginator(videoLecture, video_per_page)
+        video_page_number = request.GET.get("page")
+        video_page_obj = paginator.get_page(video_page_number)
+        embedLecture = EmbedLecture.objects.all()
         document = Document.objects.all()
         files = Pdf.objects.all()
-        return render(request, self.template_name, {'upload_video' : upload_video,
-                                                     'embed_video' : embed_video,
+        return render(request, self.template_name, {'videoLecture' : videoLecture,
+                                                     'embedLecture' : embedLecture,
                                                      'document' : document,
+                                                     'video_page_obj' : video_page_obj,
                                                      'files': files})
     
 

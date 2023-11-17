@@ -4,7 +4,7 @@
 {% block main %}
 
 <div class="main container">
-    <form action="{% url "show-quiz" assessment.id %}" method="post">
+    <form action="{% url "show-quiz" assessment.id %}" method="post" id = "test">
         {% csrf_token %}
         <div class="text-end"> Time left = <span id="timer">{{assessment.duration}}</span></div>
         {% if questions %}
@@ -30,29 +30,39 @@
         </div>
         {% endfor %}
     {% endif %}
+
+
+    {{assessment.duration}}
+
 </div>
 
 <script>
-    {% comment %} document.getElementById('timer').innerHTML =
-  02 + ":" + 11; {% endcomment %}
 startTimer();
-
 
 function startTimer() {
   var presentTime = document.getElementById('timer').innerHTML;
   var timeArray = presentTime.split(/[:]+/);
-  var m = timeArray[0];
-  var s = checkSecond((timeArray[1] - 1));
-  if(s==59){m=m-1}
-  if(m<0){
+  var h = timeArray[0];
+  var m = timeArray[1];
+
+  var s = checkSecond((timeArray[2] - 1));
+
+  if(s == 59){
+    m = m - 1
+  }
+  if(m == 0 & s == 0) {
+    h = h-1;
+    m = 60
+  }
+  if(h < 0){
+    document.getElementById('test').submit()
     return
   }
   
   document.getElementById('timer').innerHTML =
-    m + ":" + s;
-  console.log(m)
+   h + ":" + m + ":" + s;
   setTimeout(startTimer, 1000);
-  
+
 }
 
 function checkSecond(sec) {

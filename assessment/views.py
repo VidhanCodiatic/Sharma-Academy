@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from assessment.utils import send_email_with_marks
@@ -256,6 +256,15 @@ class QuestionListView(ListView):
     model = Question
     template_name = "assessment/question.html"
 
+# class QuestionDetailView(DetailView):
+#     model = Question
+#     template_name = "assessment/question_detail.html"
+
+class QuestionDeleteView(DeleteView):
+    model = Question
+    # success_url = reverse('show-question')
+    template_name = "assessment/question.html"
+    redirect = '/assessment/show-question/'
 
 
     # rattings = Ratting.objects.filter(product__image__id=pk).order_by('-id')[:5]
