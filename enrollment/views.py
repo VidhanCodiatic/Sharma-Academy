@@ -13,26 +13,23 @@ from django.conf import settings
 from Sharma_Academy import settings as paymentSetting
 
 
-
 @csrf_exempt
 def create_checkout_session(request, id):
-
     """ Checkout session for stripe payment """
 
     request_data = json.loads(request.body)
-    course = get_object_or_404(Course, pk = id)
-    
+    course = get_object_or_404(Course, pk=id)
 
     stripe.api_key = paymentSetting.STRIPE_SECRET_KEY
     checkout_session = stripe.checkout.Session.create(
-        customer_email = request_data['email'],
+        customer_email=request_data['email'],
         payment_method_types=['card'],
         line_items=[
             {
                 'price_data': {
                     'currency': 'inr',
                     'product_data': {
-                    'name': course.name,
+                        'name': course.name,
                     },
                     'unit_amount': int(course.fees*100),
                 },
@@ -71,24 +68,25 @@ class PaymentSuccessView(TemplateView):
         session_id = request.GET.get('session_id')
         if session_id is None:
             return HttpResponseNotFound()
-        
+
         stripe.api_key = settings.STRIPE_SECRET_KEY
         session = stripe.checkout.Session.retrieve(session_id)
 
-        order = get_object_or_404(EnrolledCourse, session_id = session_id)
+        order = get_object_or_404(EnrolledCourse, session_id=session_id)
         order.paid = True
         order.save()
         return render(request, self.template_name)
-    
+
+
 class PaymentFailedView(TemplateView):
 
     """ Payment Failed for stripe payment """
 
     template_name = "payments/payment_failed.html"
 
+
 @csrf_exempt
 def stripe_webhook(request):
-
     """ Connect webhook with stripe payment """
 
     stripe.api_key = paymentSetting.STRIPE_SECRET_KEY
@@ -115,6 +113,6 @@ def stripe_webhook(request):
 
     return HttpResponse(status=200)
 
-class OrderHistoryListView(ListView):
-    model = EnrolledCourse
-    template_name = "enrollment/order_history.html"
+# class OrderHistoryListView(ListView):
+#     model = EnrolledCourse
+#     template_name = "enrollment/order_history.html"

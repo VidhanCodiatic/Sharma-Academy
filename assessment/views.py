@@ -33,7 +33,13 @@ class ShowAssessmentView(View):
     template_name = 'assessment/assessment.html'
 
     def get(self, request, *args, **kwargs):
-        assessment = Assessment.objects.all().annotate(avg_rating = Avg('rating__rating', default = 0))
+        if 'q' in request.GET:
+            q = request.GET['q']
+            assessment = Assessment.objects.filter(title__icontains=q)
+        else:
+            assessment = Assessment.objects.all()
+        assessment = assessment.annotate(
+            avg_rating=Avg('rating__rating', default=0))
         assessment_per_page = 5
         paginator = Paginator(assessment, assessment_per_page, orphans=2)
         page_number = request.GET.get("page")
@@ -42,7 +48,7 @@ class ShowAssessmentView(View):
                                                     'page_obj': page_obj})
 
 
-class AssessmentView(View):
+class AddAssessmentView(View):
 
     " Define assessment type and course "
 
@@ -67,7 +73,7 @@ class AssessmentView(View):
             return JsonResponse({'message': 'user is not instructor'})
 
 
-class QuestionView(View):
+class AddQuestionView(View):
 
     " Adding questions for assessment "
 
@@ -95,7 +101,7 @@ class QuestionView(View):
             return HttpResponseRedirect(reverse('question'))
 
 
-class ChoiceView(View):
+class AddChoiceView(View):
 
     " Adding questions for assessment "
 
@@ -219,7 +225,8 @@ class ShowQuizView(View):
                         score += 1
             form = RatingForm
             send_email_with_marks(request, score)
-            messages.success(request, 'Answer submmited successfully. Check your email for score.')
+            messages.success(
+                request, 'Answer submmited successfully. Check your email for score.')
             return render(request, 'assessment/score.html', {'score': score, 'form': form,
                                                              'assessment': assessment})
         else:
@@ -235,7 +242,7 @@ class ShowQuizView(View):
                 form = RatingForm
                 messages.success(request, 'Assessment submited successfully.')
                 return render(request, 'assessment/score.html', {'form': form,
-                                                             'assessment': assessment})
+                                                                 'assessment': assessment})
             messages.success(request, 'Assessment submit failed.')
             return HttpResponseRedirect(reverse("show-assessment"))
 
@@ -260,15 +267,15 @@ class QuestionListView(ListView):
 #     model = Question
 #     template_name = "assessment/question_detail.html"
 
+
 class QuestionDeleteView(DeleteView):
     model = Question
-    # success_url = reverse('show-question')
-    template_name = "assessment/question.html"
-    redirect = '/assessment/show-question/'
+    success_url = '/assessment/show-question/'
+    template_name = "assessment/question_confirm_delete.html"
 
 
-    # rattings = Ratting.objects.filter(product__image__id=pk).order_by('-id')[:5]
-    #     average_rating = rattings.aggregate(Avg('ratting'))['ratting__avg']
-          
-    #     return render(request, 'customer/product_detail.html', {"products":products,
-    #             "img":img, 'category':category, 'dict1':dict1, "flag":flag, "stripe_publishable_key":stripe_publishable_key, "average_rating":round(average_rating) if average_rating else 0,"rattings":rattings})
+class QuestionUpdateView(UpdateView):
+    model = Question
+    fields = ['question']
+    success_url = '/assessment/show-question/'
+    template_name = "assessment/question_confirm_update.html"

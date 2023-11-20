@@ -2,12 +2,13 @@
 from django import forms
 
 from assessment.models import (
-    Assessment, 
-    Question, 
-    Choice, 
-    Answer, 
+    Assessment,
+    Question,
+    Choice,
+    Answer,
     Rating
 )
+
 
 class AssessmentForm(forms.ModelForm):
 
@@ -18,17 +19,20 @@ class AssessmentForm(forms.ModelForm):
         #     'duration' : forms.TextInput(attrs={'class':'durationInputWidget'})
         # }
 
+
 class QuestionForm(forms.ModelForm):
 
     class Meta:
         model = Question
         fields = '__all__'
 
+
 class ChoiceForm(forms.ModelForm):
 
     class Meta:
         model = Choice
         fields = '__all__'
+
 
 class AnswerForm(forms.ModelForm):
 
@@ -37,9 +41,9 @@ class AnswerForm(forms.ModelForm):
         # fields = ['content']
         fields = '__all__'
         widgets = {
-            'question' : forms.HiddenInput(),
-            'user' : forms.HiddenInput(),
-            'rating' : forms.HiddenInput(),
+            'question': forms.HiddenInput(),
+            'user': forms.HiddenInput(),
+            'rating': forms.HiddenInput(),
         }
 
     # def __init__(self, *args, **kwargs):
@@ -48,7 +52,6 @@ class AnswerForm(forms.ModelForm):
     #     if user:
     #         self.fields['user'].initial = user
 
-            
     # def __init__(self, *args, **kwargs):
     #     super(AnswerForm, self).__init__(*args, **kwargs)
     #     self.fields['user'].queryset = CustomUser.objects.filter(type = 'instructor')
@@ -61,7 +64,7 @@ class RatingForm(forms.ModelForm):
         fields = '__all__'
 
         widgets = {
-            'user' : forms.HiddenInput(),
-            'assessment' : forms.HiddenInput(),
-            'rating' : forms.HiddenInput(),
+            'user': forms.HiddenInput(),
+            'assessment': forms.HiddenInput(),
+            'rating': forms.HiddenInput(),
         }

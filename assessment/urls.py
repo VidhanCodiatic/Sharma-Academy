@@ -3,23 +3,27 @@ from django.urls import path
 
 from assessment.views import (
     ShowAssessmentView,
-    QuestionView,
+    AddQuestionView,
     QuestionListView,
     QuestionDeleteView,
-    AssessmentView,
-    ChoiceView,
+    QuestionUpdateView,
+    AddAssessmentView,
+    AddChoiceView,
     ShowQuizView,
-    rating_quiz
+    rating_quiz,
 )
 
 urlpatterns = [
     path('show-assessment/', ShowAssessmentView.as_view(), name='show-assessment'),
-    path('add-assessment/', AssessmentView.as_view(), name='add-assessment'),
-    path('question/', QuestionView.as_view(), name='question'),
-    path('choice/', ChoiceView.as_view(), name='choice'),
+    path('add-assessment/', AddAssessmentView.as_view(), name='add-assessment'),
+    path('add-question/', AddQuestionView.as_view(), name='add-question'),
+    path('add-choice/', AddChoiceView.as_view(), name='add-choice'),
     # question crud
     path('show-question/', QuestionListView.as_view(), name='show-question'),
-    path('delete-question/<int:pk>/', QuestionDeleteView.as_view(), name='delete-question'),
+    path('delete-question/<int:pk>/',
+         QuestionDeleteView.as_view(), name='delete-question'),
+    path('update-question/<int:pk>/',
+         QuestionUpdateView.as_view(), name='update-question'),
     # path('quiz/', QuizView.as_view(), name = 'quiz'),
     # path('text-quiz/', TextquizView.as_view(), name = 'text_quiz'),
     path('show-quiz/<str:pk>/', ShowQuizView.as_view(), name='show-quiz'),

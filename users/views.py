@@ -62,8 +62,9 @@ class RegisterView(View):
                     'token': email_verification_token.make_token(user),
                 }
             )
-            plain_text = strip_tags(html_content) 
-            message = EmailMultiAlternatives(to=[user.email], subject=subject, body=plain_text)
+            plain_text = strip_tags(html_content)
+            message = EmailMultiAlternatives(
+                to=[user.email], subject=subject, body=plain_text)
             message.content_subtype = "html"
             message.send()
             messages.success(request, 'verify your email.')
@@ -141,13 +142,10 @@ class ActivateView(View):
         user.save()
         return HttpResponseRedirect(reverse('login'))
 
-    
-
 
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('login'))
-
 
 
 # import json

@@ -1,9 +1,9 @@
 from django.contrib import admin
 
 from assessment.models import (
-    Assessment, 
-    Question, 
-    Choice, 
+    Assessment,
+    Question,
+    Choice,
     Answer,
     Rating
 )

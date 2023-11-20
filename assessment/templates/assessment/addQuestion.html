@@ -4,7 +4,7 @@
 {% block main %}
 
 <div class="main-form container">
-    <form action="{% url "question" %}" method="post">
+    <form action="{% url "add-question" %}" method="post">
         {% csrf_token %}
         <div class="form-group">
             <label for="assessment">Assessment :- </label>

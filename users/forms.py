@@ -1,8 +1,8 @@
 
 from users.models import CustomUser
 from django import forms
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
+# from django.contrib.auth.password_validation import validate_password
+# from django.core.exceptions import ValidationError
 
 
 class RegisterForm(forms.ModelForm):
@@ -10,7 +10,7 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         password = forms.CharField(
-            widget = forms.PasswordInput
+            widget=forms.PasswordInput
         )
         widgets = {
             # 'password': forms.PasswordInput(),
@@ -29,10 +29,11 @@ class RegisterForm(forms.ModelForm):
         #         self.add_error('password', error)
         #     return password
 
+
 class LoginForm(forms.ModelForm):
 
     class Meta:
-        password = forms.CharField(widget = forms.PasswordInput())
+        password = forms.CharField(widget=forms.PasswordInput())
         model = CustomUser
         widgets = {
             'password': forms.PasswordInput(),

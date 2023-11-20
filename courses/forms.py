@@ -11,7 +11,8 @@ class CourseForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CourseForm, self).__init__(*args, **kwargs)
-        self.fields['instructor'].queryset = CustomUser.objects.filter(type = 'instructor')
+        self.fields['instructor'].queryset = CustomUser.objects.filter(
+            type='instructor')
 
 
 class LectureForm(forms.ModelForm):
@@ -19,11 +20,12 @@ class LectureForm(forms.ModelForm):
     class Meta:
         model = Lecture
         fields = '__all__'
-    
 
     def __init__(self, *args, **kwargs):
         super(LectureForm, self).__init__(*args, **kwargs)
-        self.fields['instructor'].queryset = CustomUser.objects.filter(type = 'instructor')
+        self.fields['instructor'].queryset = CustomUser.objects.filter(
+            type='instructor')
+
 
 class PdfForm(forms.ModelForm):
 
@@ -33,7 +35,9 @@ class PdfForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(PdfForm, self).__init__(*args, **kwargs)
-        self.fields['instructor'].queryset = CustomUser.objects.filter(type = 'instructor')
+        self.fields['instructor'].queryset = CustomUser.objects.filter(
+            type='instructor')
+
 
 class EmbedLectureForm(forms.ModelForm):
 
@@ -43,7 +47,9 @@ class EmbedLectureForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(EmbedLectureForm, self).__init__(*args, **kwargs)
-        self.fields['instructor'].queryset = CustomUser.objects.filter(type = 'instructor')
+        self.fields['instructor'].queryset = CustomUser.objects.filter(
+            type='instructor')
+
 
 class DocumentForm(forms.ModelForm):
 
@@ -53,4 +59,5 @@ class DocumentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(DocumentForm, self).__init__(*args, **kwargs)
-        self.fields['instructor'].queryset = CustomUser.objects.filter(type = 'instructor')
+        self.fields['instructor'].queryset = CustomUser.objects.filter(
+            type='instructor')

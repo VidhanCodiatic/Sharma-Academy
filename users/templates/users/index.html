@@ -14,9 +14,9 @@
       <div class="hero-info" data-aos="zoom-in" data-aos-delay="100">
         <h2>We provide<br><span>solution</span><br>of your problems!</h2>
         <div>
-          <a type="button" class="btn-get-started" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+          {% comment %} <a type="button" class="btn-get-started" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">
             Enroll
-          </a>
+          </a> {% endcomment %}
           <!-- Button trigger modal -->
           <a type="button" class="btn-services" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
             Courses
@@ -106,7 +106,6 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Id</th>
               <th scope="col">Title</th>
               <th scope="col">Type</th>
               <th scope="col">Duration</th>
@@ -115,7 +114,6 @@
           <tbody>
             {% for i in assessments %}
             <tr>
-              <td>{{i.id}}</td>
               <td><a href="{% url "show-quiz" i.id %}">{{i.title}}</a></td>
               <td>{{i.type}}</td>
               <td>{{i.duration}}</td>
@@ -145,7 +143,6 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Id</th>
               <th scope="col">Name</th>
               <th scope="col">Duration</th>
               <th scope="col">Fees</th>
@@ -154,7 +151,6 @@
           <tbody>
             {% for i in courses %}
             <tr>
-              <td>{{i.id}}</td>
               <td>{{i.name}}</td>
               <td>{{i.duration}}</td>
               <td>{{i.fees}}</td>
@@ -180,36 +176,38 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
 
-{% if courses %}
-<div id="myCarousel" class="carousel slide container" data-bs-ride="carousel">
-  <div class="carousel-inner w-100">
-    {% for i in courses %}
-    <div class="carousel-item{% if forloop.first %} active{% endif %}">
-      <div class="col-md-3">
-        <div class="card card-body">
-          <img src="{{i.image.url}}" height="200px" class="w-100">
-          <h3>{{i.description}}</h3>
-          <h6><strong><span> ₹ </span></strong>{{ i.fees }}</h6>
-          <a href="{% url "buycourse" i.id %}" class="btn btn-primary">Buy</a>
+{% if user.type == 'student' %}
+  {% if courses %}
+  <div id="myCarousel" class="carousel slide container" data-bs-ride="carousel">
+    <div class="carousel-inner w-100">
+      {% for i in courses %}
+      <div class="carousel-item{% if forloop.first %} active{% endif %}">
+        <div class="col-md-3">
+          <div class="card card-body">
+            <img src="{{i.image.url}}" height="200px" class="w-100">
+            <h3>{{i.description}}</h3>
+            <h6><strong><span> ₹ </span></strong>{{ i.fees }}</h6>
+            <a href="{% url "buycourse" i.id %}" class="btn btn-primary">Buy</a>
+          </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
-<br>
+  <br>
 
-{% else %}
-<h1>No Course Available</h1>
+  {% else %}
+  <h1>No Course Available</h1>
 
+  {% endif %}
 {% endif %}
 
 

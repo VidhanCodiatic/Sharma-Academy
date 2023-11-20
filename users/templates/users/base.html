@@ -63,10 +63,11 @@
                 Quiz
               </a> {% endcomment %}
               <a class="dropdown-item" href="{% url "show-assessment" %}">Quiz</a>
+              <a class="dropdown-item" href="{% url "show-question" %}">All Questions</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{% url "add-assessment" %}">Add</a>
-              <a class="dropdown-item" href="{% url "question" %}">Question</a>
-              <a class="dropdown-item" href="{% url "choice" %}">Choice</a>
+              <a class="dropdown-item" href="{% url "add-assessment" %}">Add Assessment</a>
+              <a class="dropdown-item" href="{% url "add-question" %}">Add Question</a>
+              <a class="dropdown-item" href="{% url "add-choice" %}">Add Choice</a>
             </div>
           </li>
           <li class="nav-item dropdown">
@@ -76,18 +77,18 @@
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="{% url "showlectures" %}">Lectures</a>
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{% url "addlecture" %}">Lecture</a>
-              <a class="dropdown-item" href="{% url "addembed" %}">Embed</a>
-              <a class="dropdown-item" href="{% url "adddox" %}">Dox</a>
-              <a class="dropdown-item" href="{% url "addpdf" %}">Pdf</a>
+              <a class="dropdown-item" href="{% url "addlecture" %}">Add Lecture</a>
+              <a class="dropdown-item" href="{% url "addembed" %}">Add Embed</a>
+              <a class="dropdown-item" href="{% url "adddox" %}">Add Dox</a>
+              <a class="dropdown-item" href="{% url "addpdf" %}">Add Pdf</a>
             </div>
           </li>
           {% endif %}
         </ul>
-        <form class="form-inline my-2 my-lg-0">
+        {% comment %} <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        </form> {% endcomment %}
         <a href="{% url "logout" %}" class="btn btn-danger mx-2">Log Out</a>
       </div>
     </nav>

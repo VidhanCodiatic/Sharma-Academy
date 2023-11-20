@@ -20,8 +20,8 @@ class LectureView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, {'form' : form})
-    
+        return render(request, self.template_name, {'form': form})
+
     def post(self, request, *args, **kwargs):
 
         form = self.form_class(request.POST)
@@ -39,7 +39,7 @@ class LectureView(View):
         else:
             messages.error(request, 'User is not instructor.')
             return HttpResponseRedirect(reverse('addlecture'))
-        
+
 
 class EmbedLectureView(View):
 
@@ -50,8 +50,8 @@ class EmbedLectureView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, {'form' : form})
-    
+        return render(request, self.template_name, {'form': form})
+
     def post(self, request, *args, **kwargs):
 
         form = self.form_class(request.POST)
@@ -70,6 +70,7 @@ class EmbedLectureView(View):
             messages.error(request, 'User is not instuctor.')
             return HttpResponseRedirect(reverse('addembed'))
 
+
 class DocumentView(View):
 
     """ Documentation create for courses """
@@ -79,8 +80,8 @@ class DocumentView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, {'form' : form})
-    
+        return render(request, self.template_name, {'form': form})
+
     def post(self, request, *args, **kwargs):
 
         form = self.form_class(request.POST)
@@ -109,8 +110,8 @@ class PdfView(View):
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
-        return render(request, self.template_name, {'form' : form})
-    
+        return render(request, self.template_name, {'form': form})
+
     def post(self, request, *args, **kwargs):
 
         form = self.form_class(request.POST)
@@ -129,6 +130,7 @@ class PdfView(View):
             messages.error(request, 'User is not instructor.')
             return HttpResponseRedirect(reverse('addpdf'))
 
+
 class ShowLectureView(View):
     template_name = "courses/showLectures.html"
 
@@ -141,22 +143,18 @@ class ShowLectureView(View):
         embedLecture = EmbedLecture.objects.all()
         document = Document.objects.all()
         files = Pdf.objects.all()
-        return render(request, self.template_name, {'videoLecture' : videoLecture,
-                                                     'embedLecture' : embedLecture,
-                                                     'document' : document,
-                                                     'video_page_obj' : video_page_obj,
-                                                     'files': files})
-    
+        return render(request, self.template_name, {'videoLecture': videoLecture,
+                                                    'embedLecture': embedLecture,
+                                                    'document': document,
+                                                    'video_page_obj': video_page_obj,
+                                                    'files': files})
+
 
 class ShowCourseView(View):
     template_name = "courses/showCourses.html"
 
     def get(self, request, *args, **kwargs):
-        course = Course.objects.get(id = self.kwargs['pk'])
+        course = Course.objects.get(id=self.kwargs['pk'])
         stripe_publishable_key = settings.STRIPE_PUBLISHABLE_KEY
-        return render(request, self.template_name, {'course' : course, 
-                                            'stripe_publishable_key':stripe_publishable_key})
-    
-
-
-        
+        return render(request, self.template_name, {'course': course,
+                                                    'stripe_publishable_key': stripe_publishable_key})
