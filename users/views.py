@@ -70,7 +70,7 @@ class RegisterView(View):
             messages.success(request, 'verify your email.')
             return redirect("/")
         else:
-            print(form.errors)
+            # print("++++++++++++",form.errors)
             err = form.errors
             messages.error(
                 request, err)
@@ -96,6 +96,7 @@ class LoginView(View):
         user_password = payload.get('password', '')
         user = authenticate(email=email, password=user_password)
         if user is None:
+            # print()
             messages.success(
                 request, 'Please verify email or check email / password')
             return redirect('/')

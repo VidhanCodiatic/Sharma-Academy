@@ -68,6 +68,7 @@ class AddAssessmentView(View):
                 form.save()
                 return JsonResponse({'message': 'Assessment added successfully'})
             else:
+                print(form.errors)
                 return JsonResponse({'message': 'Assessment added failed'})
         else:
             return JsonResponse({'message': 'user is not instructor'})
@@ -216,6 +217,11 @@ class ShowQuizView(View):
     def post(self, request, *args, **kwargs):
         assessment = Assessment.objects.get(id=self.kwargs['pk'])
         if assessment.type == 'mcq':
+            print('=============', request.session)
+            print('=============', assessment.id)
+            if assessment.id in request.session:
+                messages.success(request, 'Assessment already submitted.')
+                return HttpResponseRedirect(reverse("show-assessment"))
             score = 0
             for q in Question.objects.all():
                 select_option_id = request.POST.get(f'q_{q.id}')
@@ -223,6 +229,8 @@ class ShowQuizView(View):
                     select_option = Choice.objects.get(pk=select_option_id)
                     if select_option.correct:
                         score += 1
+            request.session['assessment.id'] = True
+            print('++++++++++++++++++', request.session['assessment.id'])
             form = RatingForm
             send_email_with_marks(request, score)
             messages.success(
@@ -238,6 +246,10 @@ class ShowQuizView(View):
             formset = AnswerFormSet(
                 request.POST, queryset=Answer.objects.none())
             if formset.is_valid():
+                if 'assessment_submitted' in request.session:
+                    messages.success(request, 'Assessment already submitted.')
+                    return HttpResponseRedirect(reverse("show-assessment"))
+                request.session['assessment_submitted'] = True
                 formset.save()
                 form = RatingForm
                 messages.success(request, 'Assessment submited successfully.')
