@@ -47,6 +47,10 @@ class RegisterView(View):
 
         form = self.form_class(request.POST)
         if form.is_valid():
+            # if user.type == 'admin':
+            #     messages.error(
+            #     request, 'user is not valid')
+            #     return redirect('/register/')
             user = form.save(commit=False)
             user.password = make_password(user.password)
             user.is_active = False

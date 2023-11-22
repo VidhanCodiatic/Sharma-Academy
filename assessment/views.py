@@ -196,23 +196,28 @@ class ShowQuizView(View):
     " Showing quiz according to user request "
 
     def get(self, request, *args, **kwargs):
-        assessment = Assessment.objects.get(id=self.kwargs['pk'])
-        if assessment.type == 'mcq':
-            questions = assessment.question_set.all()
-            return render(request, 'assessment/quiz.html', {'questions': questions,
-                                                            'assessment': assessment, })
-        else:
-            questions = assessment.question_set.all()
-            count = questions.count()
-            user = request.user.id
-            AnswerFormSet = modelformset_factory(
-                Answer, form=AnswerForm, extra=count)
-            # AnswerFormSet.form = staticmethod(curry(AnswerForm, user=request.user.id))
-            formset = AnswerFormSet(queryset=Answer.objects.none())
-            return render(request, 'assessment/showquiz.html', {'questions': questions,
-                                                                'formset': formset,
-                                                                'user': user,
+        try:
+            assessment = Assessment.objects.get(id=self.kwargs['pk'])
+            if assessment.type == 'mcq':
+                questions = assessment.question_set.all()
+                return render(request, 'assessment/quiz.html', {'questions': questions,
                                                                 'assessment': assessment, })
+            else:
+                questions = assessment.question_set.all()
+                count = questions.count()
+                user = request.user.id
+                AnswerFormSet = modelformset_factory(
+                    Answer, form=AnswerForm, extra=count)
+                # AnswerFormSet.form = staticmethod(curry(AnswerForm, user=request.user.id))
+                formset = AnswerFormSet(queryset=Answer.objects.none())
+                return render(request, 'assessment/showquiz.html', {'questions': questions,
+                                                                    'formset': formset,
+                                                                    'user': user,
+                                                                    'assessment': assessment, })
+        except Exception as e:
+            messages.success(
+                request, e)
+            return HttpResponseRedirect(reverse("show-assessment"))
 
     def post(self, request, *args, **kwargs):
         assessment = Assessment.objects.get(id=self.kwargs['pk'])

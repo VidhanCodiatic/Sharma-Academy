@@ -18,6 +18,14 @@ class RegisterForm(forms.ModelForm):
         }
         fields = ['email', 'phone', 'password', 'type']
 
+        def clean_phone(self):
+            phone = self.cleaned_data.get('phone')
+            if (phone.isdigit()):
+                if len(phone) == 10:
+                    return phone
+                raise forms.ValidationError("must be of 10 dugut")
+            raise forms.ValidationError("must be of number type")
+
         # def clean_password(self):
         #     print('=======================')
         #     password = self.cleaned_data.get('password')
