@@ -8,7 +8,8 @@ faker = Factory.create()
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = CustomUser
-        
+    
+    
     email = faker.email()
     password = faker.password()
     type = 'instructor'

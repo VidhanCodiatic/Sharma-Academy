@@ -21,12 +21,16 @@ class RegisterViewTest(TestCase):
     def test_register_success(self):
 
         register_url = reverse("register")
+        # password = (faker.text(6), '@#!', faker.random_number(6))
         data = {
             'email': faker.email(),
+            # 'password': 'Vidhan@#123',
             'password': faker.password(),
+            # 'password': password,
             'type': 'student',
             'phone': faker.random_number(10)
         }
+        print(data['password'])
 
         response = self.client.post(register_url, data)
 
@@ -77,7 +81,8 @@ class RegisterViewTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertTrue(CustomUser.objects.filter(
             email=data['email']).exists())
-        self.assertTrue(form['email'].errors, ['Entered email address already exists.'])
+        self.assertTrue(form['email'].errors, [
+                        'Entered email address already exists.'])
 
     def test_register_fail_password_field_is_blank(self):
 
@@ -137,7 +142,7 @@ class RegisterViewTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertTrue(form['password'].errors, [
                         'Enter a valid password, password has number and char only.'])
-        
+
     def test_register_fail_password_field_has_special_character(self):
 
         data = {
@@ -152,7 +157,7 @@ class RegisterViewTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertTrue(form['password'].errors, [
                         'Enter a valid password, password has special char only.'])
-        
+
     def test_register_fail_password_field_has_special_character_and_num(self):
 
         data = {
@@ -196,13 +201,6 @@ class RegisterViewTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertTrue(form['phone'].errors, ['Enter a valid phone number.'])
 
-
-
-
-
-
-
-
     # def test_register_fail_phone_field_has_text(self):
 
     #     data = {
@@ -216,11 +214,6 @@ class RegisterViewTest(TestCase):
 
     #     self.assertFalse(form.is_valid())
     #     self.assertTrue(form['phone'].errors, ['Enter a valid phone number.'])
-
-
-
-
-
 
     def test_register_fail_phone_number_already_exists(self):
 
@@ -237,7 +230,8 @@ class RegisterViewTest(TestCase):
         self.assertFalse(form.is_valid())
         self.assertTrue(CustomUser.objects.filter(
             phone=data['phone']).exists())
-        self.assertTrue(form['phone'].errors, ['Entered phone number already exists.'])
+        self.assertTrue(form['phone'].errors, [
+                        'Entered phone number already exists.'])
 
     def test_register_fail_type_field_is_blank(self):
 
@@ -266,58 +260,3 @@ class RegisterViewTest(TestCase):
 
         self.assertFalse(form.is_valid())
         self.assertTrue(form['type'].errors, ['Enter a valid user type.'])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # def test_register_post_failed(self):
-
-    #     # print(self.email)
-
-    #     register_url = reverse("register")
-    #     data = {
-    #         'email': faker.text(10),
-    #         'password': faker.text(10),
-    #         'type': 'student',
-    #         'phone': faker.random_number(20)
-
-    #     }
-    #     # print(data['email'], '===========')
-    #     # print(data)
-    #     response = self.client.post(register_url, data)
-    #     form = RegisterForm(data)
-
-    #     self.assertTrue(CustomUser.objects.filter(
-    #         email=self.email).exists())
-    #     self.assertFalse(form.is_valid())
-    #     self.assertTrue(form['email'].errors, ['Enter a valid email address.'])
-    #     self.assertTrue(form["password"].errors, ["Password must be atleast 8 characters long.",
-    #                                               "Password must contain one Upper and lower character.",
-    #                                               "Password must contain atleast one digit.",
-    #                                               "Password must contain atleast one special char."])
-    #     self.assertTrue(form['phone'].errors, ['Ensure this value has at most 12 characters'])
-    #     self.assertEqual(response.status_code, 302)
-
-
-#     def test_logout(self):
-
-#         self.client.login(email=self.email, password=self.password)
-
-#         logout_url = reverse('logout')
-#         response = self.client.get(logout_url)
-
-#         self.assertEqual(response.status_code, 302) # 302 is status code for redirect
-#         self.assertNotEqual(response.status_code, 404)

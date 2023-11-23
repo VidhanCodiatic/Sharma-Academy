@@ -29,8 +29,6 @@ class CustomUser(AbstractUser):
                                                    message='Password must contain atleast one digit.'),
                                     RegexValidator(regex=r'[!@#$%&*]',
                                                    message='Password must contain atleast one special char.'),
-                                    RegexValidator(
-                                        regex=r'[+-/]', inverse_match=True)
                                 ])
     type = models.CharField(max_length=100,
                             choices=TYPE, default='student')
