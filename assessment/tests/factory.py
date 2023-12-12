@@ -1,10 +1,10 @@
 
 import factory
-from assessment.models import Assessment, Question, Choice, Answer
 from faker import Factory
+
+from assessment.models import Answer, Assessment, Choice, Question
 from courses.tests.factory import CourseFactory
 from users.tests.factory_user import UserFactory
-from assessment.models import (Assessment)
 
 faker = Factory.create()
 

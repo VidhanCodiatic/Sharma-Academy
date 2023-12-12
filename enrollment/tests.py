@@ -1,11 +1,8 @@
-from django.test import TestCase, SimpleTestCase, Client
-from django.urls import reverse, resolve
-from enrollment.views import (
-    create_checkout_session, 
-    PaymentFailedView, 
-    PaymentSuccessView, 
-    stripe_webhook
-)
+from django.test import Client, SimpleTestCase, TestCase
+from django.urls import resolve, reverse
+
+from enrollment.views import (PaymentFailedView, PaymentSuccessView,
+                              create_checkout_session, stripe_webhook)
 
 # Create your tests here.
 

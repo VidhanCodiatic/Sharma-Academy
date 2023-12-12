@@ -1,14 +1,14 @@
 
 
-from django.shortcuts import render, HttpResponse, HttpResponseRedirect
-from django.views import View
-from courses.forms import LectureForm, EmbedLectureForm, DocumentForm, PdfForm
-
 from django.contrib import messages
-from courses.models import Lecture, EmbedLecture, Document, Pdf, Course
-from Sharma_Academy import settings
 from django.core.paginator import Paginator
+from django.shortcuts import HttpResponse, HttpResponseRedirect, render
 from django.urls import reverse
+from django.views import View
+
+from courses.forms import DocumentForm, EmbedLectureForm, LectureForm, PdfForm
+from courses.models import Course, Document, EmbedLecture, Lecture, Pdf
+from Sharma_Academy import settings
 
 
 class LectureView(View):
@@ -38,7 +38,7 @@ class LectureView(View):
                 return HttpResponseRedirect(reverse('addlecture'))
         else:
             messages.error(request, 'User is not instructor.')
-            return HttpResponseRedirect(reverse('addlecture'))
+            return HttpResponseRedirect(reverse('index'))
 
 
 class EmbedLectureView(View):
@@ -65,10 +65,10 @@ class EmbedLectureView(View):
                 return HttpResponseRedirect(reverse('addembed'))
             else:
                 messages.error(request, 'Embed Lecture added failed.')
-                return HttpResponseRedirect(reverse('addembed'))
+                return HttpResponseRedirect(reverse('index'))
         else:
             messages.error(request, 'User is not instuctor.')
-            return HttpResponseRedirect(reverse('addembed'))
+            return HttpResponseRedirect(reverse('index'))
 
 
 class DocumentView(View):
@@ -95,10 +95,10 @@ class DocumentView(View):
                 return HttpResponseRedirect(reverse('adddox'))
             else:
                 messages.error(request, 'Document url added failed.')
-                return HttpResponseRedirect(reverse('adddox'))
+                return HttpResponseRedirect(reverse('index'))
         else:
             messages.error(request, 'User is not instructor.')
-            return HttpResponseRedirect(reverse('adddox'))
+            return HttpResponseRedirect(reverse('index'))
 
 
 class PdfView(View):
@@ -125,10 +125,10 @@ class PdfView(View):
                 return HttpResponseRedirect(reverse('addpdf'))
             else:
                 messages.success(request, 'Pdf added failed.')
-                return HttpResponseRedirect(reverse('addpdf'))
+                return HttpResponseRedirect(reverse('index'))
         else:
             messages.error(request, 'User is not instructor.')
-            return HttpResponseRedirect(reverse('addpdf'))
+            return HttpResponseRedirect(reverse('index'))
 
 
 class ShowLectureView(View):

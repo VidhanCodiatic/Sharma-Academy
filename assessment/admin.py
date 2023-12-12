@@ -1,12 +1,6 @@
 from django.contrib import admin
 
-from assessment.models import (
-    Assessment,
-    Question,
-    Choice,
-    Answer,
-    Rating
-)
+from assessment.models import Answer, Assessment, Choice, Question, Rating
 
 # Register your models here.
 

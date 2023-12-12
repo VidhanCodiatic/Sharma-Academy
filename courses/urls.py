@@ -1,15 +1,8 @@
 
 from django.urls import path
 
-from courses.views import (
-    LectureView,
-    ShowLectureView,
-    EmbedLectureView,
-    DocumentView,
-    PdfView,
-    ShowCourseView
-)
-
+from courses.views import (DocumentView, EmbedLectureView, LectureView,
+                           PdfView, ShowCourseView, ShowLectureView)
 
 urlpatterns = [
     path('addlecture/', LectureView.as_view(), name='addlecture'),

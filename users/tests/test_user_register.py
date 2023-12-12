@@ -1,11 +1,11 @@
 from django.test import TestCase
-from django.urls import reverse, resolve
-from users.models import CustomUser
-from users.forms import RegisterForm
-from users.tests.factory_user import UserFactory
+from django.urls import resolve, reverse
 # from django.contrib.auth import get_user_model
 from faker import Factory
 
+from users.forms import RegisterForm
+from users.models import CustomUser
+from users.tests.factory_user import UserFactory
 
 faker = Factory.create()
 
@@ -21,12 +21,10 @@ class RegisterViewTest(TestCase):
     def test_register_success(self):
 
         register_url = reverse("register")
-        # password = (faker.text(6), '@#!', faker.random_number(6))
         data = {
             'email': faker.email(),
-            # 'password': 'Vidhan@#123',
-            'password': faker.password(),
-            # 'password': password,
+            'password': 'Vidhan@#123',
+            # 'password': faker.password(),
             'type': 'student',
             'phone': faker.random_number(10)
         }

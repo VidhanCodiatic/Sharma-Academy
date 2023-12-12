@@ -3,6 +3,16 @@
 {% block title %}Index{% endblock title %}
 {% block main %}
 
+{% if messages %}
+
+  {% for message in messages %}
+  <div class="alert alert-info">
+      {{ message }}
+  </div>
+  {% endfor %}
+
+{% endif %}
+
   <!-- Hero Section -->
   <section id="hero" class="clearfix">
     <div class="container" data-aos="fade-up">

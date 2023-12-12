@@ -2,21 +2,9 @@
 
 from django.contrib import admin
 
-from courses.models import (
-    Course,
-    Lecture,
-    EmbedLecture,
-    Pdf,
-    Document
-)
-
-from courses.forms import (
-    CourseForm,
-    LectureForm,
-    PdfForm,
-    EmbedLectureForm,
-    DocumentForm
-)
+from courses.forms import (CourseForm, DocumentForm, EmbedLectureForm,
+                           LectureForm, PdfForm)
+from courses.models import Course, Document, EmbedLecture, Lecture, Pdf
 
 # Register your models here.
 

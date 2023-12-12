@@ -1,5 +1,6 @@
-from courses.models import Course, Lecture, EmbedLecture, Document, Pdf
 from django import forms
+
+from courses.models import Course, Document, EmbedLecture, Lecture, Pdf
 from users.models import CustomUser
 
 

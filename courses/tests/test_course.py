@@ -1,8 +1,8 @@
 from django.test import TestCase
-from courses.tests.factory import CourseFactory
-from users.tests.factory_user import UserFactory
 from faker import Factory
 
+from courses.tests.factory import CourseFactory
+from users.tests.factory_user import UserFactory
 
 faker = Factory.create()
 

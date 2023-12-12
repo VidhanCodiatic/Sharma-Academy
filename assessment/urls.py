@@ -1,17 +1,10 @@
 
 from django.urls import path
 
-from assessment.views import (
-    ShowAssessmentView,
-    AddQuestionView,
-    QuestionListView,
-    QuestionDeleteView,
-    QuestionUpdateView,
-    AddAssessmentView,
-    AddChoiceView,
-    ShowQuizView,
-    rating_quiz,
-)
+from assessment.views import (AddAssessmentView, AddChoiceView,
+                              AddQuestionView, QuestionDeleteView,
+                              QuestionListView, QuestionUpdateView,
+                              ShowAssessmentView, ShowQuizView, rating_quiz)
 
 urlpatterns = [
     path('show-assessment/', ShowAssessmentView.as_view(), name='show-assessment'),

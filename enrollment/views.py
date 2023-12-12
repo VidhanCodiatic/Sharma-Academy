@@ -1,15 +1,18 @@
 
 
-from django.http.response import HttpResponseNotFound, JsonResponse, HttpResponse
+import json
+
+import stripe
+from django.conf import settings
+from django.http.response import (HttpResponse, HttpResponseNotFound,
+                                  JsonResponse)
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from enrollment.models import EnrolledCourse
-from courses.models import Course
-from django.views.generic import ListView, TemplateView
-import stripe
-import json
 from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
+from django.views.generic import ListView, TemplateView
+
+from courses.models import Course
+from enrollment.models import EnrolledCourse
 from Sharma_Academy import settings as paymentSetting
 
 
@@ -113,6 +116,3 @@ def stripe_webhook(request):
 
     return HttpResponse(status=200)
 
-# class OrderHistoryListView(ListView):
-#     model = EnrolledCourse
-#     template_name = "enrollment/order_history.html"

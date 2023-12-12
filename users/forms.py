@@ -1,6 +1,8 @@
 
-from users.models import CustomUser
 from django import forms
+
+from users.models import CustomUser
+
 # from django.contrib.auth.password_validation import validate_password
 # from django.core.exceptions import ValidationError
 

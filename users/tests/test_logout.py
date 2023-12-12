@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
-from users.tests.factory_user import UserFactory
 from faker import Factory
 
+from users.tests.factory_user import UserFactory
 
 faker = Factory.create()
 

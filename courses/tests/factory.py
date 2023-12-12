@@ -1,9 +1,9 @@
 
 import factory
-from courses.models import Course
 from faker import Factory
+
+from courses.models import Course, Document, EmbedLecture, Lecture, Pdf
 from users.tests.factory_user import UserFactory
-from courses.models import (Lecture,Pdf,Document, EmbedLecture)
 
 faker = Factory.create()
 

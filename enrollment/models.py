@@ -1,9 +1,10 @@
 
 
-from django.db import models
-from users.models import CustomUser
-from courses.models import Course
 from django.core import validators
+from django.db import models
+
+from courses.models import Course
+from users.models import CustomUser
 
 
 class EnrolledCourse(models.Model):

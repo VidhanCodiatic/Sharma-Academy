@@ -1,11 +1,11 @@
-from django.test import TestCase, SimpleTestCase, Client
-from django.urls import reverse, resolve
-from users.models import CustomUser
-from users.forms import LoginForm
-from users.tests.factory_user import UserFactory
+from django.test import Client, SimpleTestCase, TestCase
+from django.urls import resolve, reverse
 # from django.contrib.auth import get_user_model
 from faker import Factory
 
+from users.forms import LoginForm
+from users.models import CustomUser
+from users.tests.factory_user import UserFactory
 
 faker = Factory.create()
 

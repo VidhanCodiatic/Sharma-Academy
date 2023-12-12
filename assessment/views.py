@@ -1,29 +1,19 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
-from assessment.utils import send_email_with_marks
-from django.views import View
-from django.forms import modelformset_factory
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.urls import reverse
 from django.db.models import Avg
+from django.forms import modelformset_factory
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import redirect, render
+from django.urls import reverse
+from django.views import View
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
-from assessment.forms import (
-    QuestionForm,
-    AnswerForm,
-    AssessmentForm,
-    ChoiceForm,
-    RatingForm
-)
-
-from assessment.models import (
-    Assessment,
-    Question,
-    Choice,
-    Answer,
-    Rating
-)
+from assessment.forms import (AnswerForm, AssessmentForm, ChoiceForm,
+                              QuestionForm, RatingForm)
+from assessment.models import (Answer, Assessment, Choice, Course, Question,
+                               Rating)
+from assessment.utils import send_email_with_marks
 
 
 class ShowAssessmentView(View):
@@ -96,10 +86,10 @@ class AddQuestionView(View):
                 return HttpResponseRedirect(reverse('question'))
             else:
                 messages.error(request, 'Question add failed.')
-                return HttpResponseRedirect(reverse('question'))
+                return HttpResponseRedirect(reverse('index'))
         else:
             messages.error(request, 'User is not instructor.')
-            return HttpResponseRedirect(reverse('question'))
+            return HttpResponseRedirect(reverse('index'))
 
 
 class AddChoiceView(View):
@@ -124,10 +114,10 @@ class AddChoiceView(View):
                 return HttpResponseRedirect(reverse('choice'))
             else:
                 messages.success(request, 'Choice add Failed.')
-                return HttpResponseRedirect(reverse('choice'))
+                return HttpResponseRedirect(reverse('index'))
         else:
             messages.error(request, 'User is not instructor.')
-            return HttpResponseRedirect(reverse('choice'))
+            return HttpResponseRedirect(reverse('index'))
 
 
 # class QuizView(View):
@@ -296,3 +286,5 @@ class QuestionUpdateView(UpdateView):
     fields = ['question']
     success_url = '/assessment/show-question/'
     template_name = "assessment/question_confirm_update.html"
+
+

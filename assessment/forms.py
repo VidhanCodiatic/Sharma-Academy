@@ -1,13 +1,7 @@
 
 from django import forms
 
-from assessment.models import (
-    Assessment,
-    Question,
-    Choice,
-    Answer,
-    Rating
-)
+from assessment.models import Answer, Assessment, Choice, Question, Rating
 
 
 class AssessmentForm(forms.ModelForm):

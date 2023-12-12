@@ -1,33 +1,29 @@
 
 
-from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect
-
-from users.models import CustomUser
-from courses.models import Course, Lecture
-from assessment.models import Assessment
-from users.forms import RegisterForm, LoginForm
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.password_validation import validate_password
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ValidationError
+from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import (HttpResponse, HttpResponseRedirect, redirect,
+                              render)
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils.encoding import force_bytes, force_str
+from django.utils.html import strip_tags
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 # from enrollment.forms import EnrollForm
 from django.views import View
-from django.contrib import messages
-from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate, get_user_model
-from django.conf import settings
 
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMultiAlternatives
-from django.utils.html import strip_tags
-from django.template.loader import render_to_string
+from assessment.models import Assessment
+from courses.models import Course, Lecture
+from users.forms import LoginForm, RegisterForm
+from users.models import CustomUser
 from users.tokens import email_verification_token
-
-from django.contrib.auth.password_validation import validate_password
-from django.core.exceptions import ValidationError
-from django.urls import reverse
-from django.contrib.auth import logout
-
 
 User = settings.AUTH_USER_MODEL
 
@@ -143,8 +139,13 @@ class ActivateView(View):
 
     def get(self, request, uidb64, token):
         user = self.get_user_from_email_verification(uidb64, token)
-        user.is_active = True
-        user.save()
+        if user.type == 'student':
+            user.is_active = True
+            user.save()
+        elif user.type == 'instructor':
+            user.is_active = True
+            user.is_staff = True
+            user.save()
         return HttpResponseRedirect(reverse('login'))
 
 

@@ -1,5 +1,8 @@
-{% extends "users/base.html" %} {% load static %} {% block title %}Add
-assessment{% endblock title %} {% block main %}
+{% extends "users/base.html" %} 
+{% load static %}
+{% comment %} {% load crispy_forms_tags %}{% endcomment %} 
+{% block title %}Add assessment{% endblock title %} 
+{% block main %}
 
 <div class="main-form container">
   <h1>Add Assessment</h1>
@@ -34,6 +37,7 @@ assessment{% endblock title %} {% block main %}
           {% endfor %}
         </select>
       </div>
+      {% comment %} {{form|crispy}} {% endcomment %}
       <button class="btn btn-primary add-assessment">Add</button>
     </form>
   </div>
