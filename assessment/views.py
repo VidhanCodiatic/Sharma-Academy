@@ -83,7 +83,7 @@ class AddQuestionView(View):
             if form.is_valid():
                 form.save()
                 messages.error(request, 'Question added successfully.')
-                return HttpResponseRedirect(reverse('question'))
+                return HttpResponseRedirect(reverse('add-question'))
             else:
                 messages.error(request, 'Question add failed.')
                 return HttpResponseRedirect(reverse('index'))
@@ -111,7 +111,7 @@ class AddChoiceView(View):
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Choice added successfully.')
-                return HttpResponseRedirect(reverse('choice'))
+                return HttpResponseRedirect(reverse('add-choice'))
             else:
                 messages.success(request, 'Choice add Failed.')
                 return HttpResponseRedirect(reverse('index'))
@@ -212,8 +212,6 @@ class ShowQuizView(View):
     def post(self, request, *args, **kwargs):
         assessment = Assessment.objects.get(id=self.kwargs['pk'])
         if assessment.type == 'mcq':
-            print('=============', request.session)
-            print('=============', assessment.id)
             if assessment.id in request.session:
                 messages.success(request, 'Assessment already submitted.')
                 return HttpResponseRedirect(reverse("show-assessment"))
@@ -225,7 +223,6 @@ class ShowQuizView(View):
                     if select_option.correct:
                         score += 1
             request.session['assessment.id'] = True
-            print('++++++++++++++++++', request.session['assessment.id'])
             form = RatingForm
             send_email_with_marks(request, score)
             messages.success(
