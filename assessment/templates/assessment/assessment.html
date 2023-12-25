@@ -32,10 +32,9 @@
         </tr>
       </thead>
       <tbody>
-        {% for a in page_obj %}
+        {% for a in assessment %}
         <tr>
           <td>{{a.title}}</td>
-          <td>{{a.type}}</td>
           <td>{{a.duration}}</td>
           <td>   
             <span class="fa fa-star {% if a.avg_rating > 0 %} four {% endif %}"></span>

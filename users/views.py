@@ -20,7 +20,6 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
 
 from assessment.models import Assessment
-from courses.models import Course, Lecture
 from users.forms import LoginForm, RegisterForm
 from users.models import CustomUser
 from users.tokens import email_verification_token
@@ -107,13 +106,10 @@ class LoginView(View):
 
 @login_required
 def index(request):
-    courses = Course.objects.all()
     assessments = Assessment.objects.all()
     users = CustomUser.objects.all()
-    upload_video = Lecture.objects.all()
-    return render(request, 'users/index.html', {'courses': courses,
+    return render(request, 'users/index.html', {
                                                 'users': users,
-                                                'upload_video': upload_video,
                                                 'assessments': assessments,
                                                 })
 
@@ -152,83 +148,3 @@ class ActivateView(View):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('login'))
-
-
-# import json
-# from authlib.integrations.django_client import OAuth
-# from django.conf import settings
-# from django.shortcuts import redirect, render
-# from django.urls import reverse
-# from urllib.parse import quote_plus, urlencode
-# # from auth0.v3.authentication import GetToken
-# # from auth0.v3.management import Auth0
-
-# oauth = OAuth()
-
-# oauth.register(
-#     "auth0",
-#     client_id=settings.AUTH0_CLIENT_ID,
-#     client_secret=settings.AUTH0_CLIENT_SECRET,
-#     client_kwargs={
-#         "scope": "openid profile email",
-#     },
-#     server_metadata_url=f"https://{settings.AUTH0_DOMAIN}/.well-known/openid-configuration",
-# )
-
-
-# def authlogin(request):
-#     return oauth.auth0.authorize_redirect(
-#         request, request.build_absolute_uri(reverse("callback"))
-#     )
-
-
-# def callback(request):
-#     token = oauth.auth0.authorize_access_token(request)
-#     request.session["user"] = token
-#     # code = request.GET['code']
-#     # auth0 = Auth0(settings.AUTH_DOMAIN, settings.AUTH0_CLIENT_ID, settings.AUTH0_CLIENT_SECRET)
-#     # token_info = GetToken(settings.AUTH_DOMAIN).authorization_code(settings.AUTH0_CLIENT_ID, code, settings.AUTH0_CALLBACK_URL)
-#     # access_token = token_info['access_token']
-#     # user_info = auth0.users.get(access_token)
-
-#     # print(user_info)
-#     # print(request.session.get("user"))
-#     user = request.session.get("user").copy()
-#     user_info = user.get('userinfo')
-
-#     email = user_info.email
-#     print(email)
-
-#     if CustomUser.objects.filter(email = email).exists():
-#     # print(user_info)
-#     # print(request.session.get("user_userinfo"))
-#         return redirect(request.build_absolute_uri(reverse("user_detail")))
-#     else:
-#         CustomUser.objects.create(email = email)
-#         return redirect(request.build_absolute_uri(reverse("user_detail")))
-
-
-# def authlogout(request):
-#     request.session.clear()
-
-#     return redirect(
-#         f"https://{settings.AUTH0_DOMAIN}/v2/logout?"
-#         + urlencode(
-#             {
-#                 "returnTo": request.build_absolute_uri(reverse("user_detail")),
-#                 "client_id": settings.AUTH0_CLIENT_ID,
-#             },
-#             quote_via=quote_plus,
-#         ),
-#     )
-
-
-# def user_detail(request):
-#     return render(
-#         request,
-#         "users/user_detail.html",
-#         context={
-#             "session": request.session.get("user"),
-#             "pretty": json.dumps(request.session.get("user"), indent=4),
-#         },
-#     )

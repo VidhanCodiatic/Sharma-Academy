@@ -1,73 +1,163 @@
-{% extends "users/base.html" %}
-{% load static %}
-{% block title %}Quiz{% endblock title %}
+{% comment %} {% extends "users/base.html" %} {% endcomment %}
+{% comment %} {% load static %} {% endcomment %}
+{% comment %} {% block title %}Quiz{% endblock title %} {% endcomment %}
 {% block main %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-<div class="main container">
-    <form action="{% url "show-quiz" assessment.id %}" method="post" id = "test">
-        {% csrf_token %}
-        <div class="text-end"> Time left = <span id="timer">{{assessment.duration}}</span></div>
-        {% if questions %}
-            {% for q in questions %}
-                <p>{{ q.question }}</p>
-                {% for c in q.choice_set.all %}
-                    <input type="radio" name = "q_{{ q.id }}" value="{{ c.id }}">{{ c.option }}<br>
-                {% endfor %}
-                <br>
-            {% endfor %}
-            <input type="submit" value="Submit" class="btn btn-primary">
-        {% else %}
-        <div class="main-form container">
-            <h1 id="contain">No Questions Available if you are instructor please add questions first.</h1>
-        {% endif %}
+
+
+  .container {
+    margin: 50px auto;
+    background: white;
+    padding: 100px 30px
+  }
+
+  label.box {
+    display: flex;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 1px solid #ddd
+  }
+
+  #one:checked~label.first,
+  #two:checked~label.second,
+  #three:checked~label.third,
+  #four:checked~label.forth,
+  #five:checked~label.fifth,
+  #six:checked~label.sixth,
+  #seven:checked~label.seveth,
+  #eight:checked~label.eighth {
+    border-color: #8e498e
+  }
+
+  {% comment %} #one:checked~label.first .circle,
+  #two:checked~label.second .circle,
+  #three:checked~label.third .circle,
+  #four:checked~label.forth .circle,
+  #five:checked~label.fifth .circle,
+  #six:checked~label.sixth .circle,
+  #seven:checked~label.seveth .circle,
+  #eight:checked~label.eighth .circle {
+    border: 6px solid #8e498e;
+    background-color: #fff
+  } {% endcomment %}
+
+  label.box:hover {
+    background: #d5bbf7
+  }
+
+  label.box .course {
+    display: flex;
+    align-items: center;
+    width: 100%
+  }
+
+  label.box .circle {
+    height: 22px;
+    width: 22px;
+    border-radius: 50%;
+    margin-right: 15px;
+    border: 2px solid #ddd;
+    display: inline-block
+  }
+
+
+  .btn.btn-primary {
+    border-radius: 25px;
+    margin-top: 20px
+  }
+
+  @media(max-width: 450px) {
+    .subject {
+      font-size: 12px
+    }
+  }
+
+
+  #one .circle{
+    border: 6px solid #8e498e;
+    background-color: #fff
+  }
+
+</style>
+<div class="container mb-5">
+  <div class="row">
+    <div class="col-12">
+      {% for q in questions %}
+        <p></p>
+        <p class="fw-bold">
+          <span>{{ forloop.counter }}</span>. <span>{{ q.question }}</span>
+        </p>
+        <div id="que"> 
+          <input type="radio" name="{{ q.id }}" value="{{ q.option1 }}" id="one"> 
+          <input type="radio" name="{{ q.id }}" value="{{ q.option2 }}" id="two"> 
+          <input type="radio" name="{{ q.id }}" value="{{ q.option3 }}" id="three"> 
+          <input type="radio" name="{{ q.id }}" value="{{ q.option4 }}" id="four"> 
+          <label for="one" class="box first">
+            <div class="course"> <span class="circle"></span> <span class="subject">{{ q.option1 }}</span> </div>
+          </label>
+          <label for="two" class="box second">
+            <div class="course"> <span class="circle"></span> <span class="subject">{{ q.option2 }}</span> </div>
+          </label>
+          <label for="three" class="box third">
+            <div class="course"> <span class="circle"></span> <span class="subject">{{ q.option3 }}</span> </div>
+          </label>
+          <label for="four" class="box forth">
+            <div class="course"> <span class="circle"></span> <span class="subject">{{ q.option4 }}</span> </div>
+          </label>
         </div>
-    </form>
-
-    {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-info">
-            {{ message }}
-        </div>
-        {% endfor %}
-    {% endif %}
-
+        <br>
+      {% endfor %}
+    </div>
+    <div class="col-12">
+      <div class="d-flex justify-content-center">
+        <button class="btn btn-primary px-4 py-2 fw-bold">Continue</button>
+      </div>
+    </div>
+  </div>
 </div>
 
+
 <script>
-startTimer();
+  startTimer();
 
-function startTimer() {
-  var presentTime = document.getElementById('timer').innerHTML;
-  var timeArray = presentTime.split(/[:]+/);
-  var h = timeArray[0];
-  var m = timeArray[1];
+  function startTimer() {
+    var presentTime = document.getElementById('timer').innerHTML;
+    var timeArray = presentTime.split(/[:]+/);
+    var h = timeArray[0];
+    var m = timeArray[1];
 
-  var s = checkSecond((timeArray[2] - 1));
+    var s = checkSecond((timeArray[2] - 1));
 
-  if(s == 59){
-    m = m - 1
+    if (s == 59) {
+      m = m - 1
+    }
+    if (m == 0 & s == 0) {
+      h = h - 1;
+      m = 60
+    }
+    if (h < 0) {
+      document.getElementById('test').submit()
+      return
+    }
+
+    document.getElementById('timer').innerHTML =
+      h + ":" + m + ":" + s;
+    setTimeout(startTimer, 1000);
+
   }
-  if(m == 0 & s == 0) {
-    h = h-1;
-    m = 60
-  }
-  if(h < 0){
-    document.getElementById('test').submit()
-    return
-  }
-  
-  document.getElementById('timer').innerHTML =
-   h + ":" + m + ":" + s;
-  setTimeout(startTimer, 1000);
 
-}
-
-function checkSecond(sec) {
-  if (sec < 10 && sec >= 0) {sec = "0" + sec}; // add zero in front of numbers < 10
-  if (sec < 0) {sec = "59"};
-  return sec;
-}
+  function checkSecond(sec) {
+    if (sec < 10 && sec >= 0) { sec = "0" + sec }; // add zero in front of numbers < 10
+    if (sec < 0) { sec = "59" };
+    return sec;
+  }
 </script>
 
 {% endblock main %}
-

@@ -1,26 +1,15 @@
 
 from django.db import models
 
-from courses.models import Course
 from users.models import CustomUser
-
+from django.core.exceptions import ValidationError
 # Create your models here.
 
 
 class Assessment(models.Model):
 
-    TYPE = (
-        ('mcq', 'MCQ'),
-        ('short answer', 'Short Answer'),
-        ('essay', 'Essay'),
-    )
-
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    # duration = models.CharField(max_length = 100)
     duration = models.DurationField()
-    type = models.CharField(max_length=100,
-                            choices=TYPE, default='mcq')
 
     def __str__(self):
         return self.title
@@ -29,27 +18,16 @@ class Assessment(models.Model):
 class Question(models.Model):
 
     assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
-    question = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.question
-
-
-class Choice(models.Model):
-
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    option = models.CharField(max_length=200)
-    correct = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.option
-
-
-class Answer(models.Model):
-
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    content = models.TextField(blank=True)
+    question = models.CharField(max_length=255, null=True)
+    option1 = models.CharField(max_length=255, null=True)
+    option2 = models.CharField(max_length=255, null=True)
+    option3 = models.CharField(max_length=255, null=True)
+    option4 = models.CharField(max_length=255, null=True)
+    answer = models.CharField(max_length=255, null=True)
+    def save(self, *args, **kwargs):
+        if Question.objects.count() >= 50:
+            raise ValidationError("Cannot add more than 50 instances")
+        super(Question, self).save(*args, **kwargs)
 
 
 class Rating(models.Model):

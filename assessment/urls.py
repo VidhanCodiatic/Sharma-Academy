@@ -1,7 +1,7 @@
 
 from django.urls import path
 
-from assessment.views import (AddAssessmentView, AddChoiceView,
+from assessment.views import (AddAssessmentView,
                               AddQuestionView, QuestionDeleteView,
                               QuestionListView, QuestionUpdateView,
                               ShowAssessmentView, ShowQuizView, rating_quiz)
@@ -10,7 +10,6 @@ urlpatterns = [
     path('show-assessment/', ShowAssessmentView.as_view(), name='show-assessment'),
     path('add-assessment/', AddAssessmentView.as_view(), name='add-assessment'),
     path('add-question/', AddQuestionView.as_view(), name='add-question'),
-    path('add-choice/', AddChoiceView.as_view(), name='add-choice'),
     # question crud
     path('show-question/', QuestionListView.as_view(), name='show-question'),
     path('delete-question/<int:pk>/',

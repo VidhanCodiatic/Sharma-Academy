@@ -9,9 +9,8 @@ from django.views import View
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
 
-from assessment.forms import (AnswerForm, AssessmentForm, ChoiceForm,
-                              QuestionForm, RatingForm)
-from assessment.models import (Answer, Assessment, Choice, Course, Question,
+from assessment.forms import (AssessmentForm, QuestionForm, RatingForm)
+from assessment.models import ( Assessment, Question,
                                Rating)
 from assessment.utils import send_email_with_marks
 
@@ -29,13 +28,8 @@ class ShowAssessmentView(View):
         else:
             assessment = Assessment.objects.all()
         assessment = assessment.annotate(
-            avg_rating=Avg('rating__rating', default=0))
-        assessment_per_page = 5
-        paginator = Paginator(assessment, assessment_per_page, orphans=2)
-        page_number = request.GET.get("page")
-        page_obj = paginator.get_page(page_number)
-        return render(request, self.template_name, {'assessment': assessment,
-                                                    'page_obj': page_obj})
+            avg_rating=Avg('rating__rating', default=0))        
+        return render(request, self.template_name, {'assessment': assessment,})
 
 
 class AddAssessmentView(View):
@@ -92,95 +86,6 @@ class AddQuestionView(View):
             return HttpResponseRedirect(reverse('index'))
 
 
-class AddChoiceView(View):
-
-    " Adding questions for assessment "
-
-    form_class = ChoiceForm
-    template_name = "assessment/addChoice.html"
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        user = request.user
-
-        if user.type == 'instructor':
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Choice added successfully.')
-                return HttpResponseRedirect(reverse('add-choice'))
-            else:
-                messages.success(request, 'Choice add Failed.')
-                return HttpResponseRedirect(reverse('index'))
-        else:
-            messages.error(request, 'User is not instructor.')
-            return HttpResponseRedirect(reverse('index'))
-
-
-# class QuizView(View):
-
-#     " Generate score for particular assessment "
-
-#     form_class = AnswerForm
-#     template_name = "assessment/quiz.html"
-
-#     def get(self, request, *args, **kwargs):
-#         questions = Question.objects.all()
-#         return render(request, self.template_name, {'questions' : questions})
-
-#     def post(self, request, *args, **kwargs):
-#         score = 0
-#         for q in Question.objects.all():
-#             select_option_id = request.POST.get(f'q_{q.id}')
-#             if select_option_id:
-#                 select_option = Choice.objects.get(pk=select_option_id)
-#                 if select_option.correct:
-#                     score += 1
-
-#         return render(request, 'assessment/score.html', {'score' : score})
-
-
-# class TextquizView(View):
-
-#     " Generate score for particular assessment "
-
-#     form_class = AnswerForm
-#     template_name = "assessment/text_quiz.html"
-
-#     def get(self, request, *args, **kwargs):
-#         # if Assesment.objects.exists() == True:
-#         #     print()
-#         assesment = Assessment.objects.last()
-#         questions = assesment.question_set.all()
-#         count = questions.count()
-#         user = request.user
-#         print("=================", user)
-#         if count == 0:
-#             return HttpResponse('assessment doesnt have question now')
-#         else:
-#             AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
-#             formset = AnswerFormSet(queryset = Answer.objects.none())
-#             questions = Question.objects.all()
-#             return render(request, self.template_name, {'questions' : questions, 'formset' : formset, 'assesment': assesment})
-
-#     def post(self, request, *args, **kwargs):
-#         assesment = Assessment.objects.last()
-#         questions = assesment.question_set.all()
-#         count = questions.count()
-#         # user = request.user
-#         AnswerFormSet = modelformset_factory(Answer, form = AnswerForm, extra = count)
-#         formset = AnswerFormSet(request.POST, queryset = Answer.objects.none())
-#         # formset = formset.forms.user == user
-#         if formset.is_valid():
-#             formset.save()
-#             return HttpResponse('added')
-
-#         return HttpResponse('not added')
-
-
 class ShowQuizView(View):
 
     " Showing quiz according to user request "
@@ -188,22 +93,11 @@ class ShowQuizView(View):
     def get(self, request, *args, **kwargs):
         try:
             assessment = Assessment.objects.get(id=self.kwargs['pk'])
-            if assessment.type == 'mcq':
-                questions = assessment.question_set.all()
-                return render(request, 'assessment/quiz.html', {'questions': questions,
+            
+            questions = assessment.question_set.all()
+            return render(request, 'assessment/quiz.html', {'questions': questions,
                                                                 'assessment': assessment, })
-            else:
-                questions = assessment.question_set.all()
-                count = questions.count()
-                user = request.user.id
-                AnswerFormSet = modelformset_factory(
-                    Answer, form=AnswerForm, extra=count)
-                # AnswerFormSet.form = staticmethod(curry(AnswerForm, user=request.user.id))
-                formset = AnswerFormSet(queryset=Answer.objects.none())
-                return render(request, 'assessment/showquiz.html', {'questions': questions,
-                                                                    'formset': formset,
-                                                                    'user': user,
-                                                                    'assessment': assessment, })
+
         except Exception as e:
             messages.success(
                 request, e)
@@ -211,44 +105,28 @@ class ShowQuizView(View):
 
     def post(self, request, *args, **kwargs):
         assessment = Assessment.objects.get(id=self.kwargs['pk'])
-        if assessment.type == 'mcq':
-            if assessment.id in request.session:
-                messages.success(request, 'Assessment already submitted.')
-                return HttpResponseRedirect(reverse("show-assessment"))
-            score = 0
-            for q in Question.objects.all():
-                select_option_id = request.POST.get(f'q_{q.id}')
-                if select_option_id:
-                    select_option = Choice.objects.get(pk=select_option_id)
-                    if select_option.correct:
-                        score += 1
-            request.session['assessment.id'] = True
-            form = RatingForm
-            send_email_with_marks(request, score)
-            messages.success(
-                request, 'Answer submmited successfully. Check your email for score.')
-            return render(request, 'assessment/score.html', {'score': score, 'form': form,
-                                                             'assessment': assessment})
-        else:
-            questions = assessment.question_set.all()
-            count = questions.count()
-            AnswerFormSet = modelformset_factory(
-                Answer, form=AnswerForm, extra=count)
-            # AnswerFormSet.form = staticmethod(curry(AnswerForm, user=request.user.id))
-            formset = AnswerFormSet(
-                request.POST, queryset=Answer.objects.none())
-            if formset.is_valid():
-                if 'assessment_submitted' in request.session:
-                    messages.success(request, 'Assessment already submitted.')
-                    return HttpResponseRedirect(reverse("show-assessment"))
-                request.session['assessment_submitted'] = True
-                formset.save()
-                form = RatingForm
-                messages.success(request, 'Assessment submited successfully.')
-                return render(request, 'assessment/score.html', {'form': form,
-                                                                 'assessment': assessment})
-            messages.success(request, 'Assessment submit failed.')
+        if assessment.id in request.session:
+            messages.success(request, 'Assessment already submitted.')
             return HttpResponseRedirect(reverse("show-assessment"))
+        score = 0
+        print("score")
+        payload = request.POST
+        for q in Question.objects.all():
+            if str(q.id) in payload:
+                print("rtyuio")
+                print(payload[str(q.id)], q.answer)
+                if payload[str(q.id)] == q.answer:
+                    print("inner")
+                    score += 1
+        
+        print(score)
+        request.session['assessment.id'] = True
+        form = RatingForm
+        # send_email_with_marks(request, score)x
+        messages.success(
+            request, 'Answer submmited successfully. Check your email for score.')
+        return render(request, 'assessment/score.html', {'score': score, 'form': form,
+                                                            'assessment': assessment})
 
 
 def rating_quiz(request):
