@@ -38,3 +38,9 @@ class Rating(models.Model):
 
     def __str__(self):
         return f'{self.user} rated {self.rating} star for {self.assessment}'
+
+
+class PassFailStatus(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE)
+    status = models.BooleanField()

@@ -105,6 +105,7 @@
   </style>
   </head>
 <body>
+  {% if not passfail.status %}
     <div class="container my-5">
         <div id="quiz">
           <form action="" method="POST">
@@ -140,6 +141,9 @@
           </form>
         </div>
     </div>
+    {% else %}
+    <h1>As you passed this test so you are not eligible to give these test again Thank You</h1>
+    {% endif %}
     <!-- Include Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

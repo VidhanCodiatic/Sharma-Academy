@@ -11,9 +11,20 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 
 from assessment.forms import (AssessmentForm, QuestionForm, RatingForm)
 from assessment.models import ( Assessment, Question,
-                               Rating)
+                               Rating, PassFailStatus)
 from assessment.utils import send_email_with_marks
 
+class AddAssessmentView(View):
+
+    " Define assessment type and course "
+
+    form_class = AssessmentForm
+    template_name = 'assessment/addassessment.html'
+
+    def get(self, request, *args, **kwargs):
+        
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
 
 class ShowAssessmentView(View):
 
@@ -92,11 +103,15 @@ class ShowQuizView(View):
 
     def get(self, request, *args, **kwargs):
         try:
+            
             assessment = Assessment.objects.get(id=self.kwargs['pk'])
             
             questions = assessment.question_set.all()
+            #retrive passfailmodel object
+            passfail = PassFailStatus.objects.filter(user=request.user, assessment=assessment).first()
             return render(request, 'assessment/quiz.html', {'questions': questions,
-                                                                'assessment': assessment, })
+                                                                'assessment': assessment,
+                                                                'passfail':passfail,})
 
         except Exception as e:
             messages.success(
@@ -108,10 +123,12 @@ class ShowQuizView(View):
         if assessment.id in request.session:
             messages.success(request, 'Assessment already submitted.')
             return HttpResponseRedirect(reverse("show-assessment"))
+        
         score = 0
         print("score")
         payload = request.POST
-        for q in Question.objects.all():
+        questions = Question.objects.filter(assessment=assessment)
+        for q in questions:
             if str(q.id) in payload:
                 print("rtyuio")
                 print(payload[str(q.id)], q.answer)
@@ -120,6 +137,25 @@ class ShowQuizView(View):
                     score += 1
         
         print(score)
+        # convert score into percentage
+        score = score / len(questions) * 100
+        print(score)
+        #check score is above 80 and change status of passfail model
+        if score > 80:
+            try:
+                passfail = PassFailStatus.objects.get(assessment=assessment, user=request.user)
+            except:
+                passfail = PassFailStatus(assessment=assessment, user=request.user)
+            passfail.status = True
+            passfail.save()
+        else:
+            try:
+                passfail = PassFailStatus.objects.get(assessment=assessment, user=request.user)
+            except:
+                passfail = PassFailStatus(assessment=assessment, user=request.user)
+            passfail.status = True
+            passfail.save()
+        
         request.session['assessment.id'] = True
         form = RatingForm
         # send_email_with_marks(request, score)x
