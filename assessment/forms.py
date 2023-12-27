@@ -18,7 +18,8 @@ class QuestionForm(forms.ModelForm):
 
     class Meta:
         model = Question
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ['assessment']
 
 
 class RatingForm(forms.ModelForm):

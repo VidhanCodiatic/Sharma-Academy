@@ -64,24 +64,16 @@
               </a> {% endcomment %}
               <a class="dropdown-item" href="{% url "show-assessment" %}">Quiz</a>
               <a class="dropdown-item" href="{% url "show-question" %}">All Questions</a>
+              <a class="dropdown-item" href="{% url "list-assessment" %}">All Assessment</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url "add-assessment" %}">Add Assessment</a>
-              <a class="dropdown-item" href="{% url "add-question" %}">Add Question</a>
-              <a class="dropdown-item" href="{% url "add-choice" %}">Add Choice</a>
             </div>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Lecture
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{% url "showlectures" %}">Lectures</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="{% url "addlecture" %}">Add Lecture</a>
-              <a class="dropdown-item" href="{% url "addembed" %}">Add Embed</a>
-              <a class="dropdown-item" href="{% url "adddox" %}">Add Dox</a>
-              <a class="dropdown-item" href="{% url "addpdf" %}">Add Pdf</a>
-            </div>
+            
           </li>
           {% endif %}
         </ul>

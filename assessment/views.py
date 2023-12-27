@@ -8,11 +8,23 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView)
-
+from django.shortcuts import get_object_or_404
 from assessment.forms import (AssessmentForm, QuestionForm, RatingForm)
 from assessment.models import ( Assessment, Question,
                                Rating, PassFailStatus)
 from assessment.utils import send_email_with_marks
+
+class ListAssessment(View):
+
+    " Showing all assessment present in project "
+
+    template_name = 'assessment/list_assessment.html'
+
+    def get(self, request, *args, **kwargs):
+        assessment = Assessment.objects.all()
+        assessment = assessment.annotate(
+            avg_rating=Avg('rating__rating', default=0))        
+        return render(request, self.template_name, {'assessment': assessment,})
 
 class AddAssessmentView(View):
 
@@ -86,9 +98,15 @@ class AddQuestionView(View):
 
         if user.type == 'instructor':
             if form.is_valid():
+                assessment_id = kwargs.get('pk')
+                assessment = get_object_or_404(Assessment, id=assessment_id)
+                #insert assessment in form data
+                form.instance.assessment = assessment
+                print(form.cleaned_data)
                 form.save()
                 messages.error(request, 'Question added successfully.')
-                return HttpResponseRedirect(reverse('add-question'))
+                # return reverse of add-question with assessemnt id
+                return HttpResponseRedirect(reverse('add-question', args=[assessment_id]))
             else:
                 messages.error(request, 'Question add failed.')
                 return HttpResponseRedirect(reverse('index'))
