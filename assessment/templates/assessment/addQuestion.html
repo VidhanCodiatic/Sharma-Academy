@@ -4,6 +4,7 @@
 {% block main %}
 
 <div class="main-form container">
+  <center>Questions present in <strong>{{assessment.title}}</strong> assesssment<h1 style="font-size: 90px;">{{count}}</h1></center>
     <form action="" method="post">
         {% csrf_token %}
         {{form.as_p}}

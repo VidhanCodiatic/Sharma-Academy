@@ -89,8 +89,11 @@ class AddQuestionView(View):
     template_name = "assessment/addQuestion.html"
 
     def get(self, request, *args, **kwargs):
+        assessment_id = kwargs.get('pk')
+        assessment = get_object_or_404(Assessment, id=assessment_id)
+        count = Question.objects.filter(assessment=assessment).count()
         form = self.form_class()
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'count':count,'assessment':assessment})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -102,7 +105,6 @@ class AddQuestionView(View):
                 assessment = get_object_or_404(Assessment, id=assessment_id)
                 #insert assessment in form data
                 form.instance.assessment = assessment
-                print(form.cleaned_data)
                 form.save()
                 messages.error(request, 'Question added successfully.')
                 # return reverse of add-question with assessemnt id
@@ -171,7 +173,7 @@ class ShowQuizView(View):
                 passfail = PassFailStatus.objects.get(assessment=assessment, user=request.user)
             except:
                 passfail = PassFailStatus(assessment=assessment, user=request.user)
-            passfail.status = True
+            passfail.status = False
             passfail.save()
         
         request.session['assessment.id'] = True

@@ -105,12 +105,44 @@
   </style>
   </head>
 <body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand ml-auto" href="#" style="font-size: 1.5rem; font-weight: bold;">{{assessment.title}} - MCQ Assessment</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item" id="timer" style="font-size: 1.5rem; font-weight: bold;">
+                {{assessment.duration}}
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script>
+  var assessmentSubmitted = false; // Set to true when the assessment is submitted
+
+  // Add event listener for keydown event
+  window.addEventListener('keydown', function (e) {
+    // Check if Ctrl+Shift+R is pressed (key code 82) and prevent default behavior
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 82) {
+      e.preventDefault();
+      if (!assessmentSubmitted) {
+        // Display a confirmation message
+        var confirmationMessage = 'Are you sure you want to refresh? Your assessment progress may be lost.';
+        alert(confirmationMessage);
+      }
+    }
+  });
+</script>
+
+
   {% if not passfail.status %}
     <div class="container my-5">
         <div id="quiz">
           <form action="" method="POST">
             {% csrf_token %}
-            <h2 class="text-center mb-4">Dynamic MCQ Quiz</h2>
+            <h2 class="text-center mb-4"></h2>
             <div class="card">
               {% for q in questions %}
                 <div class="card-body">
@@ -155,34 +187,39 @@
   function startTimer() {
     var presentTime = document.getElementById('timer').innerHTML;
     var timeArray = presentTime.split(/[:]+/);
-    var h = timeArray[0];
-    var m = timeArray[1];
-
-    var s = checkSecond((timeArray[2] - 1));
-
+    var h = parseInt(timeArray[0]);
+    var m = parseInt(timeArray[1]);
+    var s = checkSecond(parseInt(timeArray[2]) - 1);
+  
     if (s == 59) {
-      m = m - 1
+      m = m - 1;
     }
-    if (m == 0 & s == 0) {
+    if (m < 0) {
       h = h - 1;
-      m = 60
+      m = 59;  // Set minutes to 59 when hours decrement
     }
     if (h < 0) {
-      document.getElementById('test').submit()
-      return
+      // Optionally, you can stop the timer or perform some other action here
+      console.log('Timer expired');
+      return;
     }
-
-    document.getElementById('timer').innerHTML =
-      h + ":" + m + ":" + s;
+  
+    document.getElementById('timer').innerHTML = h + ":" + m + ":" + s;
     setTimeout(startTimer, 1000);
-
   }
-
+  
   function checkSecond(sec) {
-    if (sec < 10 && sec >= 0) { sec = "0" + sec }; // add zero in front of numbers < 10
-    if (sec < 0) { sec = "59" };
+    if (sec < 10 && sec >= 0) {
+      sec = "0" + sec;
+    } else if (sec < 0) {
+      sec = "59";
+    }
     return sec;
   }
+  
+  window.onbeforeunload = function(){
+    return "dfghjkl";
+  };
 </script>
 
 {% endblock main %}

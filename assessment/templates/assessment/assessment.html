@@ -25,10 +25,12 @@
       <thead>
         <tr>
           <th scope="col">Title</th>
-          <th scope="col">Type</th>
           <th scope="col">Duration</th>
           <th scope="col">Rating</th>
           <th scope="col"></th>
+          {% if user.type == 'instructor' %}  
+          <th scope="col"></th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -44,6 +46,9 @@
             <span class="fa fa-star {% if a.avg_rating > 4 %} four {% endif %}"></span>
           </td>
           <td><a href="{% url "show-quiz" a.id %}" class="btn btn-primary">Start</a></td>
+          {% if user.type == 'instructor' %}
+          <td><a href="{% url "add-question" a.id %}" class="btn btn-warning">Edit</a></td>
+          {% endif %}
         </tr>
         {% endfor %}
       </tbody>

@@ -44,14 +44,6 @@
             </a> {% endcomment %}
             <a class="nav-link" href="{% url "show-assessment" %}">Quiz</a>
           </li>
-          <li class="nav-item">
-            <a type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#staticBackdropAssessment">
-              About us
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Lecture</a>
-          </li>
           {% endif %}
           {% if user.type == 'instructor' %}
           <li class="nav-item dropdown">
@@ -64,17 +56,11 @@
               </a> {% endcomment %}
               <a class="dropdown-item" href="{% url "show-assessment" %}">Quiz</a>
               <a class="dropdown-item" href="{% url "show-question" %}">All Questions</a>
-              <a class="dropdown-item" href="{% url "list-assessment" %}">All Assessment</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url "add-assessment" %}">Add Assessment</a>
             </div>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Lecture
-            </a>
-            
-          </li>
+          
           {% endif %}
         </ul>
         {% comment %} <form class="form-inline my-2 my-lg-0">
@@ -96,83 +82,17 @@
 
     <!-- footer section start here -->
 
-    <div id="footer-sidebar">
-      <div  class="container">
-          <div class="row">
-              <div class="col-sm-6 col-md-4">
-                  <div class="footer-widget">
-                      <h4>Company</h4>
-                      <ul>
-                        <li>About Us</li>
-                        <li>Careers</li>
-                        <li>Blogs</li>
-                        <li>Privacy policy</li>
-                        <li>Terms&Conditions</li>
-                      </ul>
-                  </div>
-              </div>
-              <div class="col-sm-6 col-md-4">
-                  <div class="footer-widget">
-                      <h4>Help & support</h4>
-                      <ul class="latest-news">
-                          <li><i class="fa fa-angle-double-right"></i>
-                          <a href="">Site Map</a></li>
-                          <li><i class="fa fa-angle-double-right"></i>
-                          <a href="">Restrictions</a></li>
-                          <li><i class="fa fa-angle-double-right"></i>
-                          <a href="">User Guidelines</a></li>
-                          <li><i class="fa fa-angle-double-right"></i>
-                          <a href="">Refund policy</a></li>
-                          <li><i class="fa fa-angle-double-right"></i>
-                          <a href="">Grievance Redressal</a></li>    
-                      </ul>
-                  </div>
-              </div>
-              <div class="col-sm-6 col-md-4">
-                  <div class="footer-widget">
-                      <h4>Sharma Academy Centre</h4>
-                      <ul class="latest-news">
-                        <li><i class="fa fa-angle-double-right"></i>
-                        <a href="">IIT Bombay</a></li>
-                        <li><i class="fa fa-angle-double-right"></i>
-                        <a href="">IIT Madras</a></li>
-                        <li><i class="fa fa-angle-double-right"></i>
-                        <a href="">IIT Kharagpur</a></li>
-                        <li><i class="fa fa-angle-double-right"></i>
-                        <a href="">IIT Kanpur</a></li>
-                        <li><i class="fa fa-angle-double-right"></i>
-                        <a href="">IIT Delhi</a></li>    
-                    </ul>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
 
   <!-- footer section ends here -->
 
   <div id="footer">
       <div class="container">
           <div class="row">
+            <center>
               <div class="col-md-6">
                 &copy; Copyright <strong>Sharma Academy</strong>. All Rights Reserved
               </div>
-              <div class="col-md-6">
-                  <ul id="social-icons" class="float-md-end">
-                      <li><a href="#" class="fa fa-facebook-square"></a>
-                      </li>
-                      <li><a href="#" class="fa fa-youtube"></a>
-                      </li>
-                      <li><a href="#" class="fa fa-twitter"></a>
-                      </li>
-                      <li><a href="#" class="fa fa-linkedin"></a>
-                      </li>
-                      <li><a href="#" class="fa fa-instagram"></a>
-                      </li>
-                      <li><a href="#" class="fa fa-telegram"></a>
-                      </li>
-                  </ul>
-              </div>
+            </center>
           </div>
       </div>
   </div>
